@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Who's tweet is in anyway?</p>
+
+    <% if (session && session.oauthRequestToken) { %>
+    	Logged in as <%= session.profile.screen_name %>
+      <img src="<%= session.profile.profile_image_url_https %>" alt="<%= session.profile.screen_name %>" />
+    <% } else { %>
+    	<a href="/sessions/connect">Sign in with Twitter</a>
+    <% } %>
+  </body>
+</html>
