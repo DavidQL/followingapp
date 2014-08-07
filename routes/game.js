@@ -3,10 +3,10 @@ module.exports = function(app) {
   var router = express.Router();
 
   return router.get('/', function(req, res) {
-    if (req.session.profile) {
-      res.redirect('/game');
+    if (!req.session.profile) {
+      res.redirect('/');
     } else {
-      res.render('index', { title: 'Whose Tweet Is It Anyway?'});
+      res.render('game', { title: 'Whose Tweet Is It Anyway?', profile: req.session.profile });
     }
   });
 };

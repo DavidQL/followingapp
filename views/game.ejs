@@ -8,6 +8,9 @@
     <h1><%= title %></h1>
     <p>Who's tweet is in anyway?</p>
 
-  	<a href="/sessions/connect">Sign in with Twitter</a>
+      Logged in as <%= profile.screen_name %>
+      <img src="<%= profile.profile_image_url_https %>" alt="<%= profile.screen_name %>" />
+
+      <script src="/javascripts/bundle.js"></script>
   </body>
 </html>

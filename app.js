@@ -34,6 +34,8 @@ require('./lib/authentication')({
 });
 
 app.use('/', routes(app));
+app.use('/tweets', require('./routes/tweets')(app));
+app.use('/game', require('./routes/game')(app));
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

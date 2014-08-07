@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "oauth": "^0.9.12",
-    "express-session": "^1.7.4"
+    "express-session": "^1.7.4",
+    "underscore": "^1.6.0"
   }
 }
