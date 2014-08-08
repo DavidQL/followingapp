@@ -6,11 +6,13 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Who's tweet is in anyway?</p>
+    Logged in as <%= profile.screen_name %>
+    <img src="<%= profile.profile_image_url_https %>" alt="<%= profile.screen_name %>" />
 
-      Logged in as <%= profile.screen_name %>
-      <img src="<%= profile.profile_image_url_https %>" alt="<%= profile.screen_name %>" />
+    <div id="main">
 
-      <script src="/javascripts/bundle.js"></script>
+    </div>
+
+    <script src="/javascripts/bundle.js"></script>
   </body>
 </html>
