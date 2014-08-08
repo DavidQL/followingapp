@@ -1,4 +1,4 @@
-[ { created_at: 'Thu Aug 07 15:01:42 +0000 2014',
+module.exports = [ { created_at: 'Thu Aug 07 15:01:42 +0000 2014',
     id: 497397175937409000,
     id_str: '497397175937409024',
     text: 'Why I am leaving the best job I ever had http://t.co/5z7d1uwldo &lt;&lt; Max, you make all Dads proud. Much respect. Now come visit us in Italy :D',
@@ -13644,4 +13644,4 @@
     favorited: false,
     retweeted: false,
     possibly_sensitive: false,
-    lang: 'en' } ]
+    lang: 'en' } ];

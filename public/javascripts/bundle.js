@@ -29444,28 +29444,84 @@ module.exports = warning;
 (88)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/davidaragon/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
+},{}],"/Users/davidaragon/dev/whose-tweet/js/app/question.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      return (
+        React.DOM.div(null, 
+          "This is the question"
+        )
+      );
+    }
+});
+
+},{"./../../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/davidaragon/dev/whose-tweet/js/app/skeleton.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
+var $ = require('./../../bower_components/jquery/dist/jquery');
+var Thermometer = require('./thermometer.jsx');
+var Question = require('./question.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+    componentDidMount: function() {
+      $.get('/tweets')
+        .done(function(tweets) {
+          this.setState({
+            tweets: tweets,
+            round: this.state.round
+          });
+        }.bind(this))
+        .fail(function(error) {
+          console.err('Error fetching tweets');
+        });
+    },
+
+    getInitialState: function() {
+      return {
+        tweets: [],
+        round: 1
+      };
+    },
+
+    render: function() {
+      return (
+        React.DOM.div(null, 
+          Thermometer(null), 
+          Question(null)
+        )
+      );
+    }
+});
+
+},{"./../../bower_components/jquery/dist/jquery":"/Users/davidaragon/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js","./question.jsx":"/Users/davidaragon/dev/whose-tweet/js/app/question.jsx","./thermometer.jsx":"/Users/davidaragon/dev/whose-tweet/js/app/thermometer.jsx"}],"/Users/davidaragon/dev/whose-tweet/js/app/thermometer.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      return (
+        React.DOM.div(null, 
+          "This is the thermometer"
+        )
+      );
+    }
+});
+
+},{"./../../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/davidaragon/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
 /** @jsx React.DOM */(function() {
   var _ = require('underscore');
   var $ = require('./../bower_components/jquery/dist/jquery');
-  var React = require('./../bower_components/react/react-with-addons');
+  var React = window.React = require('./../bower_components/react/react-with-addons');
+  var Skeleton = require('./app/skeleton.jsx');
 
   $(document).ready(function() {
-    var Skeleton = React.createClass({displayName: 'Skeleton',
-      render: function() {
-        return (
-          React.DOM.h3(null, " Whose Tweet Is It Anyway? ")
-        );
-      }
-    });
-
     React.renderComponent(
       Skeleton(null),
       $('#main').get(0)
     );
   });
 })();
-},{"./../bower_components/jquery/dist/jquery":"/Users/davidaragon/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/davidaragon/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/davidaragon/dev/whose-tweet/node_modules/underscore/underscore.js":[function(require,module,exports){
+},{"./../bower_components/jquery/dist/jquery":"/Users/davidaragon/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js","./app/skeleton.jsx":"/Users/davidaragon/dev/whose-tweet/js/app/skeleton.jsx","underscore":"/Users/davidaragon/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/davidaragon/dev/whose-tweet/node_modules/underscore/underscore.js":[function(require,module,exports){
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
