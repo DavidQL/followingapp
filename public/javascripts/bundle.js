@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/davidaragon/dev/whose-tweet/bower_components/jquery/dist/jquery.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.1
  * http://jquery.com/
@@ -9190,7 +9190,7 @@ return jQuery;
 
 }));
 
-},{}],"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js":[function(require,module,exports){
+},{}],"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js":[function(require,module,exports){
 (function (global){
 /**
  * React (with addons) v0.11.1
@@ -29444,31 +29444,105 @@ module.exports = warning;
 (88)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/davidaragon/dev/whose-tweet/js/app/question.jsx":[function(require,module,exports){
-/** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
+},{}],"/Users/David/dev/whose-tweet/js/app/question/index.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
+var Round1 = require('./round1.jsx');
+var Round2 = require('./round2.jsx');
+var Round3 = require('./round3.jsx');
+var Round4 = require('./round4.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
+      var Question = (function() {
+        switch(this.props.round) {
+        case 1: 
+          return Round1({game_data: this.props.game_data.round1})
+          break;
+        case 2:
+          return Round2(null)
+          break;
+        case 3:
+          return Round3(null)
+          break;
+        case 4:
+          return Round4(null)
+          break;
+        }
+      }.bind(this))();
+
+      return (
+        Question
+      );
+    }
+});
+
+},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./round1.jsx":"/Users/David/dev/whose-tweet/js/app/question/round1.jsx","./round2.jsx":"/Users/David/dev/whose-tweet/js/app/question/round2.jsx","./round3.jsx":"/Users/David/dev/whose-tweet/js/app/question/round3.jsx","./round4.jsx":"/Users/David/dev/whose-tweet/js/app/question/round4.jsx"}],"/Users/David/dev/whose-tweet/js/app/question/round1.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
+var _ = require('underscore');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      var Avatars = _.map(this.props.game_data[0].people, function(person) {
+        return React.DOM.img({src: person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger")});
+      });
       return (
         React.DOM.div(null, 
-          "This is the question"
+          React.DOM.h4(null, "Round 1"), 
+          "Tweet: ", this.props.game_data[0].tweet.body, 
+          "people:",  
+
+          Avatars 
         )
       );
     }
 });
 
-},{"./../../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/davidaragon/dev/whose-tweet/js/app/skeleton.jsx":[function(require,module,exports){
+},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round2.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      return (
+        React.DOM.div(null, "Round 1")
+      );
+    }
+});
+
+},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/David/dev/whose-tweet/js/app/question/round3.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      return (
+        React.DOM.div(null, "Round 1")
+      );
+    }
+});
+
+},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/David/dev/whose-tweet/js/app/question/round4.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      return (
+        React.DOM.div(null, "Round 1")
+      );
+    }
+});
+
+},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/David/dev/whose-tweet/js/app/skeleton.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
 var $ = require('./../../bower_components/jquery/dist/jquery');
+var streamParser = require('./stream_parser');
 var Thermometer = require('./thermometer.jsx');
-var Question = require('./question.jsx');
+var Question = require('./question/index.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
     componentDidMount: function() {
       $.get('/tweets')
         .done(function(tweets) {
           this.setState({
-            tweets: tweets,
+            game_data: streamParser(tweets),
             round: this.state.round
           });
         }.bind(this))
@@ -29479,7 +29553,20 @@ module.exports = React.createClass({displayName: 'exports',
 
     getInitialState: function() {
       return {
-        tweets: [],
+        game_data: {
+          round1: [{
+            tweet: {},
+            people: [{}, {}, {}]
+          }],
+          round2: [{
+            tweet: {},
+            people: []
+          }],
+          round3: [{
+            tweet: {},
+            people: []
+          }],
+        },
         round: 1
       };
     },
@@ -29488,13 +29575,61 @@ module.exports = React.createClass({displayName: 'exports',
       return (
         React.DOM.div(null, 
           Thermometer(null), 
-          Question(null)
+          Question({game_data: this.state.game_data, round: this.state.round})
         )
       );
     }
 });
 
-},{"./../../bower_components/jquery/dist/jquery":"/Users/davidaragon/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js","./question.jsx":"/Users/davidaragon/dev/whose-tweet/js/app/question.jsx","./thermometer.jsx":"/Users/davidaragon/dev/whose-tweet/js/app/thermometer.jsx"}],"/Users/davidaragon/dev/whose-tweet/js/app/thermometer.jsx":[function(require,module,exports){
+},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js","./thermometer.jsx":"/Users/David/dev/whose-tweet/js/app/thermometer.jsx"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
+var _ = require('underscore');
+
+
+module.exports = function(tweets) {
+  var uniqueUsers = _.uniq(tweets.map(function(tweet) {
+      return tweet.user;
+    }), function(user) {
+      return user.id;
+    });
+  var randomTweets = _.sample(tweets, 3);
+  var round1 = randomTweets.map(function(tweet) {
+      var people = [tweet.user];
+      people.push(
+          _.chain(uniqueUsers)
+          .reject(function(user) {
+            return user.id === tweet.user.id;
+          })
+          .sample(2) 
+          .value()
+      );
+
+      return {
+        tweet: {
+          body: tweet.text,
+          date: tweet.created_at,
+          author_id: tweet.user.id
+        },
+        people: _.map(_.flatten(people), function(person) {
+          return {
+            screen_name: person.screen_name,
+            id: person.id,
+            profile_image_url: person.profile_image_url
+          };
+        })
+      };
+    });
+  var round2 = {};
+  var round3 = {};
+  var round4 = {};
+
+  return {
+    round1: round1,
+    round2: round2,
+    round3: round3,
+    round4: round4
+  };
+};
+},{"underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/thermometer.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
 
 module.exports = React.createClass({displayName: 'exports',
@@ -29507,7 +29642,7 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{"./../../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/davidaragon/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
+},{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/David/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
 /** @jsx React.DOM */(function() {
   var _ = require('underscore');
   var $ = require('./../bower_components/jquery/dist/jquery');
@@ -29521,7 +29656,7 @@ module.exports = React.createClass({displayName: 'exports',
     );
   });
 })();
-},{"./../bower_components/jquery/dist/jquery":"/Users/davidaragon/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../bower_components/react/react-with-addons":"/Users/davidaragon/dev/whose-tweet/bower_components/react/react-with-addons.js","./app/skeleton.jsx":"/Users/davidaragon/dev/whose-tweet/js/app/skeleton.jsx","underscore":"/Users/davidaragon/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/davidaragon/dev/whose-tweet/node_modules/underscore/underscore.js":[function(require,module,exports){
+},{"./../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./app/skeleton.jsx":"/Users/David/dev/whose-tweet/js/app/skeleton.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js":[function(require,module,exports){
 //     Underscore.js 1.6.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -30866,4 +31001,4 @@ module.exports = React.createClass({displayName: 'exports',
   }
 }).call(this);
 
-},{}]},{},["/Users/davidaragon/dev/whose-tweet/js/main.jsx"]);
+},{}]},{},["/Users/David/dev/whose-tweet/js/main.jsx"]);
