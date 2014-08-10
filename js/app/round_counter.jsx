@@ -4,7 +4,7 @@ module.exports = React.createClass({
     render: function() {
       return (
         <div>
-          This is the thermometer
+          Round counter says: round {this.props.round}
         </div>
       );
     }

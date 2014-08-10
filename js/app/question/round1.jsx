@@ -1,18 +1,21 @@
 var React = require('./../../../bower_components/react/react-with-addons');
 var _ = require('underscore');
+var AvatarGallery = require('./components/avatar_gallery.jsx');
 
 module.exports = React.createClass({
+    getInitialState: function() {
+      return {
+        attempt: 1
+      };
+    },
+
     render: function() {
-      var Avatars = _.map(this.props.game_data[0].people, function(person) {
-        return <img src={person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger")} />;
-      });
       return (
         <div>
-          <h4>Round 1</h4>
           Tweet: {this.props.game_data[0].tweet.body}
           people: 
 
-          { Avatars }
+          <AvatarGallery game_data={this.props.game_data} attempt={this.state.attempt} />
         </div>
       );
     }

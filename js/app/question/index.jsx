@@ -12,7 +12,7 @@ module.exports = React.createClass({
           return <Round1 game_data={this.props.game_data.round1}/>
           break;
         case 2:
-          return <Round2 />
+          return <Round2 game_data={this.props.game_data.round2}/>
           break;
         case 3:
           return <Round3 />
