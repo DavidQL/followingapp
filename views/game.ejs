@@ -2,14 +2,27 @@
 <html>
   <head>
     <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    Logged in as <%= profile.screen_name %>
-    <img src="<%= profile.profile_image_url_https %>" alt="<%= profile.screen_name %>" />
+    
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Whose Tweet is it Anyway?</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <div class="pull-right">
+            Logged in as <%= profile.screen_name %>
+            <img src="<%= profile.profile_image_url_https %>" alt="<%= profile.screen_name %>" />
+          </div>
+        </div>
+      </div>
+    </nav>
 
-    <div id="main">
+
+    <div id="main" class="container">
 
     </div>
 

@@ -29454,7 +29454,7 @@ module.exports = React.createClass({displayName: 'exports',
         return React.DOM.img({src: person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger")});
       });
       return (
-        React.DOM.div(null, 
+        React.DOM.div({className: "col-md-9 text-center avatar-gallery"}, 
           Avatars
         )
       );
@@ -29507,10 +29507,11 @@ module.exports = React.createClass({displayName: 'exports',
 
     render: function() {
       return (
-        React.DOM.div(null, 
-          "Tweet: ", this.props.game_data[0].tweet.body, 
-          "people:",  
-
+        React.DOM.div({className: "col-md-9"}, 
+          React.DOM.div({className: "col-md-5 tweet"}, 
+            this.props.game_data[0].tweet.body
+          ), 
+          
           AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt})
         )
       );
@@ -29531,10 +29532,11 @@ module.exports = React.createClass({displayName: 'exports',
 
     render: function() {
       return (
-        React.DOM.div(null, 
-          "Tweet: ", this.props.game_data[0].tweet.body, 
-          "people:",  
-
+        React.DOM.div({className: "col-md-9"}, 
+          React.DOM.div({className: "col-md-5 tweet"}, 
+            this.props.game_data[0].tweet.body
+          ), 
+          
           AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt})
         )
       );
@@ -29569,7 +29571,7 @@ module.exports = React.createClass({displayName: 'exports',
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
       return (
-        React.DOM.div(null, 
+        React.DOM.div({className: "col-md-3"}, 
           "Round counter says: round ", this.props.round
         )
       );
