@@ -11,10 +11,13 @@ module.exports = React.createClass({
 
     render: function() {
       return (
-        <div className="col-md-9">
-          <div className="col-md-5 tweet">
-            {this.props.game_data[0].tweet.body}
+        <div className="col-md-6">
+          <div className="row">
+            <div className="col-md-9 tweet center-block">
+              {this.props.game_data[0].tweet.body}
+            </div>
           </div>
+
           
           <AvatarGallery game_data={this.props.game_data} attempt={this.state.attempt} />
         </div>

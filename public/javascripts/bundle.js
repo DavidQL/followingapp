@@ -29454,9 +29454,12 @@ module.exports = React.createClass({displayName: 'exports',
         return React.DOM.img({src: person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger")});
       });
       return (
-        React.DOM.div({className: "col-md-9 text-center avatar-gallery"}, 
-          Avatars
+        React.DOM.div({className: "row"}, 
+          React.DOM.div({className: "text-center avatar-gallery center-block"}, 
+            Avatars
+          )
         )
+
       );
     }
 });
@@ -29507,10 +29510,13 @@ module.exports = React.createClass({displayName: 'exports',
 
     render: function() {
       return (
-        React.DOM.div({className: "col-md-9"}, 
-          React.DOM.div({className: "col-md-5 tweet"}, 
-            this.props.game_data[0].tweet.body
+        React.DOM.div({className: "col-md-6"}, 
+          React.DOM.div({className: "row"}, 
+            React.DOM.div({className: "col-md-9 tweet center-block"}, 
+              this.props.game_data[0].tweet.body
+            )
           ), 
+
           
           AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt})
         )
@@ -29532,10 +29538,13 @@ module.exports = React.createClass({displayName: 'exports',
 
     render: function() {
       return (
-        React.DOM.div({className: "col-md-9"}, 
-          React.DOM.div({className: "col-md-5 tweet"}, 
-            this.props.game_data[0].tweet.body
+        React.DOM.div({className: "col-md-6"}, 
+          React.DOM.div({className: "row"}, 
+            React.DOM.div({className: "col-md-9 tweet center-block"}, 
+              this.props.game_data[0].tweet.body
+            )
           ), 
+
           
           AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt})
         )

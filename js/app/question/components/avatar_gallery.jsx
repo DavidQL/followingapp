@@ -7,9 +7,12 @@ module.exports = React.createClass({
         return <img src={person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger")} />;
       });
       return (
-        <div className="col-md-9 text-center avatar-gallery">
-          {Avatars}
+        <div className="row">
+          <div className="text-center avatar-gallery center-block">
+            {Avatars}
+          </div>
         </div>
+
       );
     }
 });
