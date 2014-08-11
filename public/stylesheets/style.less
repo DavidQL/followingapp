@@ -1,3 +1,46 @@
+@blue: #0077A1;
+@tan: #E6A58B;
+@red: #DA5D3E;
+
 .tweet, .avatar-gallery {
   float:none;
+}
+.tweet {
+  position:relative;
+  background:white;
+  padding:10px;
+  font-family: Helvetica;
+  .date {
+    font-size: 13px;
+    color: gray;
+  }
+}
+.avatar-gallery {
+  padding:20px 0;
+  img {
+    margin:0 10px;
+    border-radius:40px;
+    border:5px solid @red;
+  }
+}
+
+body {
+  background: #ececec;
+  font-family: 'Handlee', cursive;
+}
+.navbar-default {
+  background: @blue;
+
+  .navbar-brand {
+    color: @tan;
+    font-size:25px;
+  }
+  color: @tan;
+  border: none;
+  border-radius: 0;
+}
+
+.question {
+  padding:20px;
+
 }

@@ -1,1 +1,1 @@
-.tweet,.avatar-gallery{float:none}
+.tweet,.avatar-gallery{float:none}.tweet{position:relative;background:white;padding:10px;font-family:Helvetica}.tweet .date{font-size:13px;color:gray}.avatar-gallery{padding:20px 0}.avatar-gallery img{margin:0 10px;border-radius:40px;border:5px solid #da5d3e}body{background:#ececec;font-family:'Handlee',cursive}.navbar-default{background:#0077a1;color:#e6a58b;border:none;border-radius:0}.navbar-default .navbar-brand{color:#e6a58b;font-size:25px}.question{padding:20px}
