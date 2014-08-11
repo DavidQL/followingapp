@@ -1,31 +1,31 @@
 var React = require('./../../../bower_components/react/react-with-addons');
 var _ = require('underscore');
-var moment = require('moment');
 var AvatarGallery = require('./components/avatar_gallery.jsx');
+var Tweet = require('./components/tweet.jsx');
+var Alert = require('./components/alert.jsx');
+var QuestionBase = require('./mixins/question_base.jsx');
 
 module.exports = React.createClass({
-    getInitialState: function() {
-      return {
-        attempt: 1
-      };
-    },
+    mixins: [QuestionBase],
 
     render: function() {
-      var formattedDate = moment(this.props.game_data[0].tweet.date).format('h:mm a - D MMM YYYY');
-      return (
-        <div className="col-md-6 question">
-          <div className="row">
-            <div className="col-md-9 tweet center-block">
-              {this.props.game_data[0].tweet.body}
-              <div className="date">
-                {formattedDate}
-              </div>
-            </div>
+      var Component;
+      if (this.state.alert) {
+        Component = (
+          <div className="col-md-6 question">
+            <Alert data={this.state.alert} />
           </div>
-
-          
-          <AvatarGallery game_data={this.props.game_data} attempt={this.state.attempt} />
-        </div>
+        )
+      } else {
+        Component = (
+          <div className="col-md-6 question">
+            <Tweet game_data={this.props.game_data} attempt={this.state.attempt}/>
+            <AvatarGallery game_data={this.props.game_data} attempt={this.state.attempt} onChoose={this.checkAnswer} showHandles={true}/>
+          </div>
+        );
+      }
+      return (
+        Component
       );
     }
 });

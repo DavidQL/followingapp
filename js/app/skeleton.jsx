@@ -38,11 +38,18 @@ module.exports = React.createClass({
       };
     },
 
+    advanceRound: function() {
+      this.setState({
+        game_data: this.state.game_data,
+        round: this.state.round + 1
+      });
+    },
+
     render: function() {
       return (
         <div>
           <RoundCounter round={this.state.round}/>
-          <Question game_data={this.state.game_data} round={this.state.round} />
+          <Question game_data={this.state.game_data} round={this.state.round} advanceRound={this.advanceRound}/>
         </div>
       );
     }

@@ -4,15 +4,23 @@ var _ = require('underscore');
 module.exports = React.createClass({
     render: function() {
       var Avatars = _.map(this.props.game_data[this.props.attempt - 1].people, function(person) {
-        return <img src={person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger")} />;
-      });
+        var img_url = person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger");
+        if (this.props.showHandles) {
+           return (
+            <div className="wrapped-image">
+              <img src={img_url} onClick={this.props.onChoose.bind(null, person)}/>
+              <span className="handle">@{person.screen_name}</span>
+            </div>
+          );         
+        }
+        return <img src={img_url} onClick={this.props.onChoose.bind(null, person)}/>;
+      }, this);
       return (
         <div className="row">
           <div className="text-center avatar-gallery center-block">
             {Avatars}
           </div>
         </div>
-
       );
     }
 });

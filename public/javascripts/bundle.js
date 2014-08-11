@@ -29444,27 +29444,75 @@ module.exports = warning;
 (88)
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx":[function(require,module,exports){
+},{}],"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../../bower_components/react/react-with-addons');
+var _ = require('underscore');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      return (
+        React.DOM.div(null, 
+          this.props.data.text
+        )
+      );
+    }
+});
+
+},{"./../../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../../../bower_components/react/react-with-addons');
 var _ = require('underscore');
 
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
       var Avatars = _.map(this.props.game_data[this.props.attempt - 1].people, function(person) {
-        return React.DOM.img({src: person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger")});
-      });
+        var img_url = person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger");
+        if (this.props.showHandles) {
+           return (
+            React.DOM.div({className: "wrapped-image"}, 
+              React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person)}), 
+              React.DOM.span({className: "handle"}, "@", person.screen_name)
+            )
+          );         
+        }
+        return React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person)});
+      }, this);
       return (
         React.DOM.div({className: "row"}, 
           React.DOM.div({className: "text-center avatar-gallery center-block"}, 
             Avatars
           )
         )
-
       );
     }
 });
 
-},{"./../../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/index.jsx":[function(require,module,exports){
+},{"./../../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../../bower_components/react/react-with-addons');
+var _ = require('underscore');
+var moment = require('moment');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      var game_data_index = this.props.attempt - 1;
+      var formattedDate = moment(this.props.game_data[game_data_index].tweet.date).format('h:mm a - D MMM YYYY');
+      return (
+          React.DOM.div({className: "row"}, 
+            React.DOM.div({className: "col-md-9 tweet center-block"}, 
+              this.props.game_data[game_data_index].tweet.body, 
+              React.DOM.div({className: "date"}, 
+                formattedDate
+              )
+            ), 
+
+            React.DOM.div({className: "callout col-md-9 center-block text-center"}, 
+              "Who tweeted that?"
+            )
+          )
+      );
+    }
+});
+
+},{"./../../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","moment":"/Users/David/dev/whose-tweet/node_modules/moment/moment.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/index.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
 var Round1 = require('./round1.jsx');
 var Round2 = require('./round2.jsx');
@@ -29476,10 +29524,10 @@ module.exports = React.createClass({displayName: 'exports',
       var Question = (function() {
         switch(this.props.round) {
         case 1: 
-          return Round1({game_data: this.props.game_data.round1})
+          return Round1({game_data: this.props.game_data.round1, advanceRound: this.props.advanceRound})
           break;
         case 2:
-          return Round2({game_data: this.props.game_data.round2})
+          return Round2({game_data: this.props.game_data.round2, advanceRound: this.props.advanceRound})
           break;
         case 3:
           return Round3(null)
@@ -29496,74 +29544,135 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./round1.jsx":"/Users/David/dev/whose-tweet/js/app/question/round1.jsx","./round2.jsx":"/Users/David/dev/whose-tweet/js/app/question/round2.jsx","./round3.jsx":"/Users/David/dev/whose-tweet/js/app/question/round3.jsx","./round4.jsx":"/Users/David/dev/whose-tweet/js/app/question/round4.jsx"}],"/Users/David/dev/whose-tweet/js/app/question/round1.jsx":[function(require,module,exports){
-/** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
-var _ = require('underscore');
-var moment = require('moment');
-var AvatarGallery = require('./components/avatar_gallery.jsx');
+},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./round1.jsx":"/Users/David/dev/whose-tweet/js/app/question/round1.jsx","./round2.jsx":"/Users/David/dev/whose-tweet/js/app/question/round2.jsx","./round3.jsx":"/Users/David/dev/whose-tweet/js/app/question/round3.jsx","./round4.jsx":"/Users/David/dev/whose-tweet/js/app/question/round4.jsx"}],"/Users/David/dev/whose-tweet/js/app/question/mixins/question_base.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var _ = require('underscore');
+var AvatarGallery = require('./../components/avatar_gallery.jsx');
+var Tweet = require('./../components/tweet.jsx');
+var Alert = require('./../components/alert.jsx');
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = {
     getInitialState: function() {
       return {
         attempt: 1
       };
     },
 
-    render: function() {
-      var formattedDate = moment(this.props.game_data[0].tweet.date).format('h:mm a - D MMM YYYY');
-      return (
-        React.DOM.div({className: "col-md-6 question"}, 
-          React.DOM.div({className: "row"}, 
-            React.DOM.div({className: "col-md-9 tweet center-block"}, 
-              this.props.game_data[0].tweet.body, 
-              React.DOM.div({className: "date"}, 
-                formattedDate
-              )
-            )
-          ), 
+    handleFail: function() {
+      if (this.state.attempt >= 3) {
+        this.setState({
+          alert: {
+            text: "Wrong! Game over",
+            type: "Error"
+          }
+        });
+        return;
+      }
 
-          
-          AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt})
-        )
-      );
+      this.setState({
+        attempt: this.state.attempt + 1,
+        alert: {
+          text: "Wrong! Now at attempt " + (this.state.attempt + 1),
+          type: "Error"
+        }
+      });
+
+      setTimeout(function() {
+        this.setState({
+          attempt: this.state.attempt,
+          alert: null
+        });
+      }.bind(this), 1000);
+    },
+
+    checkAnswer: function(user) {
+      if (this.props.game_data[this.state.attempt - 1].tweet.author_id === user.id) {
+        this.setState({
+          attempt: this.state.attempt + 1,
+          alert: {
+            text: "Nice! Onto the next round...",
+            type: "Success"
+          }
+        });
+        setTimeout(this.props.advanceRound, 1000);
+      } else {
+        this.handleFail();
+      }
     }
-});
+};
 
-},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","moment":"/Users/David/dev/whose-tweet/node_modules/moment/moment.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round2.jsx":[function(require,module,exports){
+},{"./../components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./../components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","./../components/tweet.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round1.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
 var _ = require('underscore');
 var AvatarGallery = require('./components/avatar_gallery.jsx');
+var Tweet = require('./components/tweet.jsx');
+var Alert = require('./components/alert.jsx');
+var QuestionBase = require('./mixins/question_base.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
-    getInitialState: function() {
-      return {
-        attempt: 1
-      };
-    },
+    mixins: [QuestionBase],
 
     render: function() {
-      return (
-        React.DOM.div({className: "col-md-6"}, 
-          React.DOM.div({className: "row"}, 
-            React.DOM.div({className: "col-md-9 tweet center-block"}, 
-              this.props.game_data[0].tweet.body
-            )
-          ), 
-
-          
-          AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt})
+      var Component;
+      if (this.state.alert) {
+        Component = (
+          React.DOM.div({className: "col-md-6 question"}, 
+            Alert({data: this.state.alert})
+          )
         )
+      } else {
+        Component = (
+          React.DOM.div({className: "col-md-6 question"}, 
+            Tweet({game_data: this.props.game_data, attempt: this.state.attempt}), 
+            AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.checkAnswer, showHandles: true})
+          )
+        );
+      }
+      return (
+        Component
       );
     }
 });
 
-},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round3.jsx":[function(require,module,exports){
+},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","./components/tweet.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx","./mixins/question_base.jsx":"/Users/David/dev/whose-tweet/js/app/question/mixins/question_base.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round2.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
+var _ = require('underscore');
+var AvatarGallery = require('./components/avatar_gallery.jsx');
+var Tweet = require('./components/tweet.jsx');
+var Alert = require('./components/alert.jsx');
+var QuestionBase = require('./mixins/question_base.jsx');
+
+module.exports = React.createClass({displayName: 'exports',
+    mixins: [QuestionBase],
+
+    render: function() {
+      var Component;
+      if (this.state.alert) {
+        Component = (
+          React.DOM.div({className: "col-md-6 question"}, 
+            Alert({data: this.state.alert})
+          )
+        )
+      } else {
+        Component = (
+          React.DOM.div({className: "col-md-6 question"}, 
+            Tweet({game_data: this.props.game_data, attempt: this.state.attempt}), 
+            AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.checkAnswer, showHandles: false})
+          )
+        );
+      }
+      return (
+        Component
+      );
+    }
+});
+
+},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","./components/tweet.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx","./mixins/question_base.jsx":"/Users/David/dev/whose-tweet/js/app/question/mixins/question_base.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round3.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
 
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
       return (
-        React.DOM.div(null, "Round 1")
+        React.DOM.div(null, "Round 3")
       );
     }
 });
@@ -29574,7 +29683,7 @@ module.exports = React.createClass({displayName: 'exports',
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
       return (
-        React.DOM.div(null, "Round 1")
+        React.DOM.div(null, "Round 4")
       );
     }
 });
@@ -29632,11 +29741,18 @@ module.exports = React.createClass({displayName: 'exports',
       };
     },
 
+    advanceRound: function() {
+      this.setState({
+        game_data: this.state.game_data,
+        round: this.state.round + 1
+      });
+    },
+
     render: function() {
       return (
         React.DOM.div(null, 
           RoundCounter({round: this.state.round}), 
-          Question({game_data: this.state.game_data, round: this.state.round})
+          Question({game_data: this.state.game_data, round: this.state.round, advanceRound: this.advanceRound})
         )
       );
     }
