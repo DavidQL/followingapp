@@ -10,7 +10,7 @@
   background:white;
   padding:10px;
   font-family: Helvetica;
-  box-shadow:2px 2px 0px @red;
+  border: 1px solid black;
   .date {
     font-size: 13px;
     color: gray;
@@ -51,18 +51,39 @@ body {
 }
 .navbar-default {
   background: @blue;
-
+  border-bottom:2px solid @red;
   .navbar-brand {
     color: white;
     font-size:31px;
     font-family: 'Handlee', cursive;
   }
   color: white;
-  border: none;
   border-radius: 0;
 }
 
 .question {
   padding:20px;
 
+}
+
+.round-counter {
+  margin-top: 70px;
+}
+.round {
+  font-size:20px;
+  padding:0px;
+  margin-bottom:15px;
+  padding: 10px;
+  &.active {
+    background: @red;
+    color:white;
+  }
+  span {
+    float:right;
+    font-family: 'Handlee', cursive;
+    margin-left:10px;
+  }
+  div {
+    float:left;
+  }
 }

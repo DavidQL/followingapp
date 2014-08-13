@@ -29690,17 +29690,32 @@ module.exports = React.createClass({displayName: 'exports',
 
 },{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/David/dev/whose-tweet/js/app/round_counter.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
+var _ = require('underscore');
 
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
       return (
-        React.DOM.div({className: "col-md-3"}, 
-          "Round counter says: round ", this.props.round
+        React.DOM.div({className: "col-md-3 round-counter"}, 
+          
+            _.times(4, function(i) {
+              var className = (this.props.round === i + 1 ? 'active round col-md-10' : 'round col-md-10');
+              return (
+                React.DOM.div({className: className}, 
+                  React.DOM.span(null, "Round " + (i + 1)), 
+                  
+                    _.times(i+1, function() {
+                      return React.DOM.div({className: "glyphicon glyphicon-fire"})
+                    })
+                  
+                )
+              );
+            }, this)
+          
         )
       );
     }
 });
-},{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/David/dev/whose-tweet/js/app/skeleton.jsx":[function(require,module,exports){
+},{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/skeleton.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 var streamParser = require('./stream_parser');
