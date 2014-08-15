@@ -34,7 +34,7 @@ module.exports = React.createClass({
             people: [{}, {}, {}]
           }],
         },
-        round: 3
+        round: 1
       };
     },
 

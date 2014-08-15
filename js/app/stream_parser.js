@@ -30,8 +30,23 @@ var roundDataPresenter = function(opts) {
       author_id: tweet.user.id,
       id: tweet.id
     },
-    people: people
+    people: _.shuffle(people)
   }; 
+};
+var generateRound = function(opts) {
+  var randomTweets = 
+    _.chain(opts.tweets)
+    .reject(function(tweet) {
+      return _.contains(usedTweetIds, tweet.id)
+    })
+    .sample(3)
+    .value();
+
+  return randomTweets.map(function(tweet) {
+    var people = getRandomPeople({tweet: tweet, uniqueUsers: opts.uniqueUsers, count: opts.peopleCount});
+    usedTweetIds.push(tweet.id);
+    return roundDataPresenter({tweet: tweet, people: people});
+  });
 };
 
 module.exports = function(tweets) {
@@ -43,46 +58,9 @@ module.exports = function(tweets) {
     .uniq(function(user) {
       return user.id;
     });
-  var round1 = (function() {
-    var randomTweets = _.sample(tweets, 3);
-
-    return randomTweets.map(function(tweet) {
-      var people = getRandomPeople({tweet: tweet, uniqueUsers: uniqueUsers, count: 2});
-      usedTweetIds.push(tweet.id);
-      return roundDataPresenter({tweet: tweet, people: people});
-    });
-  })();
-  var round2 = (function() {
-    var randomTweets = 
-      _.chain(tweets)
-      .reject(function(tweet) {
-        return _.contains(usedTweetIds, tweet.id)
-      })
-      .sample(3)
-      .value();
-
-    return randomTweets.map(function(tweet) {
-      var people = getRandomPeople({tweet: tweet, uniqueUsers: uniqueUsers, count: 6});
-      usedTweetIds.push(tweet.id);
-      return roundDataPresenter({tweet: tweet, people: people});
-    });
-  })();
-  var round3 = (function() {
-    var randomTweets =
-      _.chain(tweets)
-      .reject(function(tweet) {
-        return _.contains(usedTweetIds, tweet.id)
-      })
-      .sample(3)
-      .value();
-
-    return randomTweets.map(function(tweet) {
-      var people = getRandomPeople({tweet: tweet, uniqueUsers: uniqueUsers, count: 6});
-      usedTweetIds.push(tweet.id);
-      return roundDataPresenter({tweet: tweet, people: people});
-    });
-  })();
-
+  var round1 = generateRound({tweets: tweets, peopleCount: 2, uniqueUsers: uniqueUsers});
+  var round2 = generateRound({tweets: tweets, peopleCount: 6, uniqueUsers: uniqueUsers});
+  var round3 = generateRound({tweets: tweets, peopleCount: 6, uniqueUsers: uniqueUsers});
   var round4 = {};
 
   return {
