@@ -1,4 +1,5 @@
 var React = require('./../../../bower_components/react/react-with-addons');
+var $ = require('./../../../bower_components/jquery/dist/jquery');
 var _ = require('underscore');
 var AvatarGallery = require('./components/avatar_gallery.jsx');
 var ProfileBackgroundGallery = require('./components/profile_background_gallery.jsx');
@@ -12,7 +13,11 @@ module.exports = React.createClass({
     onChooseAvatar: function(user) {
       var avatar_correct = this.props.game_data[this.state.attempt - 1].tweet.author_id === user.id;
       this.setState({
-        avatar_correct: avatar_correct
+        avatar_correct: avatar_correct,
+        selectedUserId: user.id
+      });
+      $('body').animate({
+        scrollTop: $(this.refs.profile_banner_callout.getDOMNode()).position().top
       });
     },
 
@@ -45,8 +50,8 @@ module.exports = React.createClass({
         Component = (
           <div className="col-md-6 question">
             <Tweet game_data={this.props.game_data} attempt={this.state.attempt}/>
-            <AvatarGallery game_data={this.props.game_data} attempt={this.state.attempt} onChoose={this.onChooseAvatar} showHandles={false}/>
-            <span className="callout col-md-9 center-block text-center">
+            <AvatarGallery game_data={this.props.game_data} attempt={this.state.attempt} onChoose={this.onChooseAvatar} showHandles={false} selectedUserId={this.state.selectedUserId}/>
+            <span ref="profile_banner_callout" className="callout col-md-9 center-block text-center">
               <strong>And</strong> what's their profile banner?
             </span>
             <ProfileBackgroundGallery game_data={this.props.game_data} attempt={this.state.attempt} onChoose={this.onChooseProfileBackground} showHandles={false} />

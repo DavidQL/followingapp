@@ -29466,15 +29466,16 @@ module.exports = React.createClass({displayName: 'exports',
     render: function() {
       var Avatars = _.map(this.props.game_data[this.props.attempt - 1].people, function(person) {
         var img_url = person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger");
+        var selected = this.props.selectedUserId === person.id ? 'selected' : '';
         if (this.props.showHandles) {
            return (
             React.DOM.div({className: "wrapped-image"}, 
-              React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person)}), 
+              React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person), className: selected}), 
               React.DOM.span({className: "handle"}, "@", person.screen_name)
             )
           );         
         }
-        return React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person)});
+        return React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person), className: selected});
       }, this);
       return (
         React.DOM.div({className: "row"}, 
@@ -29692,6 +29693,7 @@ module.exports = React.createClass({displayName: 'exports',
 
 },{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","./components/tweet.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx","./mixins/question_base.jsx":"/Users/David/dev/whose-tweet/js/app/question/mixins/question_base.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round3.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
+var $ = require('./../../../bower_components/jquery/dist/jquery');
 var _ = require('underscore');
 var AvatarGallery = require('./components/avatar_gallery.jsx');
 var ProfileBackgroundGallery = require('./components/profile_background_gallery.jsx');
@@ -29705,7 +29707,11 @@ module.exports = React.createClass({displayName: 'exports',
     onChooseAvatar: function(user) {
       var avatar_correct = this.props.game_data[this.state.attempt - 1].tweet.author_id === user.id;
       this.setState({
-        avatar_correct: avatar_correct
+        avatar_correct: avatar_correct,
+        selectedUserId: user.id
+      });
+      $('body').animate({
+        scrollTop: $(this.refs.profile_banner_callout.getDOMNode()).position().top
       });
     },
 
@@ -29738,8 +29744,8 @@ module.exports = React.createClass({displayName: 'exports',
         Component = (
           React.DOM.div({className: "col-md-6 question"}, 
             Tweet({game_data: this.props.game_data, attempt: this.state.attempt}), 
-            AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.onChooseAvatar, showHandles: false}), 
-            React.DOM.span({className: "callout col-md-9 center-block text-center"}, 
+            AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.onChooseAvatar, showHandles: false, selectedUserId: this.state.selectedUserId}), 
+            React.DOM.span({ref: "profile_banner_callout", className: "callout col-md-9 center-block text-center"}, 
               React.DOM.strong(null, "And"), " what's their profile banner?"
             ), 
             ProfileBackgroundGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.onChooseProfileBackground, showHandles: false})
@@ -29752,7 +29758,7 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","./components/profile_background_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/profile_background_gallery.jsx","./components/tweet.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx","./mixins/question_base.jsx":"/Users/David/dev/whose-tweet/js/app/question/mixins/question_base.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round4.jsx":[function(require,module,exports){
+},{"./../../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","./components/profile_background_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/profile_background_gallery.jsx","./components/tweet.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx","./mixins/question_base.jsx":"/Users/David/dev/whose-tweet/js/app/question/mixins/question_base.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round4.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
 
 module.exports = React.createClass({displayName: 'exports',
