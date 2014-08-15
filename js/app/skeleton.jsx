@@ -31,10 +31,10 @@ module.exports = React.createClass({
           }],
           round3: [{
             tweet: {},
-            people: []
+            people: [{}, {}, {}]
           }],
         },
-        round: 1
+        round: 3
       };
     },
 

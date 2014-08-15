@@ -21,7 +21,7 @@
   margin: 20px auto 10px auto;
   font-size: 20px;
 }
-.avatar-gallery {
+.avatar-gallery, {
   padding:20px 0;
   img {
     margin:0 10px;
@@ -41,6 +41,35 @@
       margin-top:10px;
       text-align:center;
       display:block;
+    }
+  }
+}
+
+.profile-background-gallery {
+  padding:20px 0;
+  img, .no-profile-background {
+    margin: 10px;
+    width: 44%;
+    display: inline;
+    text-align: center;
+    border: 2px solid @red;
+    cursor:pointer;
+    &:hover {
+      border-color: @tan;
+      color: @tan;
+    }
+  }
+  .no-profile-background {
+    display: inline-block;
+    display: inline-block;
+    height: 100%;
+    padding: 4% 0;
+    position: relative;
+    top: 2px;
+    color:@red;
+    font-family: 'Handlee', cursive;
+    span {
+      font-size:23px;
     }
   }
 }

@@ -15,7 +15,7 @@ module.exports = React.createClass({
           return <Round2 game_data={this.props.game_data.round2} advanceRound={this.props.advanceRound}/>
           break;
         case 3:
-          return <Round3 />
+          return <Round3 game_data={this.props.game_data.round3} advanceRound={this.props.advanceRound}/>
           break;
         case 4:
           return <Round4 />

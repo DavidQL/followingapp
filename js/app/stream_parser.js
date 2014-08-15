@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var usedTweetIds = [];
 var getRandomPeople = function(opts) {
   var people = [opts.tweet.user];
       people.push(
@@ -14,7 +15,8 @@ var getRandomPeople = function(opts) {
     return {
       screen_name: person.screen_name,
       id: person.id,
-      profile_image_url: person.profile_image_url
+      profile_image_url: person.profile_image_url,
+      profile_banner_url: person.profile_banner_url
     };
   });
 };
@@ -46,28 +48,41 @@ module.exports = function(tweets) {
 
     return randomTweets.map(function(tweet) {
       var people = getRandomPeople({tweet: tweet, uniqueUsers: uniqueUsers, count: 2});
+      usedTweetIds.push(tweet.id);
       return roundDataPresenter({tweet: tweet, people: people});
     });
   })();
   var round2 = (function() {
-    var usedTweetIds = round1.map(function(roundData) {
-        return roundData.tweet.id;
-    });
     var randomTweets = 
       _.chain(tweets)
       .reject(function(tweet) {
-        _.contains(usedTweetIds, tweet.id)
+        return _.contains(usedTweetIds, tweet.id)
       })
       .sample(3)
       .value();
 
     return randomTweets.map(function(tweet) {
       var people = getRandomPeople({tweet: tweet, uniqueUsers: uniqueUsers, count: 6});
+      usedTweetIds.push(tweet.id);
       return roundDataPresenter({tweet: tweet, people: people});
     });
   })();
-  
-  var round3 = {};
+  var round3 = (function() {
+    var randomTweets =
+      _.chain(tweets)
+      .reject(function(tweet) {
+        return _.contains(usedTweetIds, tweet.id)
+      })
+      .sample(3)
+      .value();
+
+    return randomTweets.map(function(tweet) {
+      var people = getRandomPeople({tweet: tweet, uniqueUsers: uniqueUsers, count: 6});
+      usedTweetIds.push(tweet.id);
+      return roundDataPresenter({tweet: tweet, people: people});
+    });
+  })();
+
   var round4 = {};
 
   return {
