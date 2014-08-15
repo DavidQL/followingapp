@@ -29872,11 +29872,49 @@ module.exports = React.createClass({displayName: 'exports',
       );
     }
 });
+},{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/scoring.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
+var _ = require('underscore');
+
+module.exports = React.createClass({displayName: 'exports',
+    getInitialState: function() {
+      return {
+        is_mounted: false,
+        score: 10000
+      };
+    },
+
+    componentDidMount: function() {
+      setTimeout(function() {
+        this.setState({
+          is_mounted: true
+        });
+      }.bind(this), 0);
+
+      setInterval(function() {
+        this.setState({
+          score: this.state.score - 83 <= 0 ? 0 : this.state.score - 83
+        });
+      }.bind(this), 500);
+    },
+
+    render: function() {
+      var mounted_classname = this.state.is_mounted ? 'mounted' : '';
+      return (
+        React.DOM.div({className: "scoring"}, 
+          React.DOM.span({className: "score " + mounted_classname}, "Score: " + this.state.score), 
+          React.DOM.div({className: mounted_classname})
+        )
+      );
+    }
+});
+
 },{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/skeleton.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 var streamParser = require('./stream_parser');
 var RoundCounter = require('./round_counter.jsx');
+var Scoring = require('./scoring.jsx');
 var Question = require('./question/index.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
@@ -29913,7 +29951,7 @@ module.exports = React.createClass({displayName: 'exports',
             people: [{}, {}, {}]
           }]
         },
-        round: 4
+        round: 1
       };
     },
 
@@ -29928,13 +29966,14 @@ module.exports = React.createClass({displayName: 'exports',
       return (
         React.DOM.div(null, 
           RoundCounter({round: this.state.round}), 
+          Scoring(null), 
           Question({game_data: this.state.game_data, round: this.state.round, advanceRound: this.advanceRound})
         )
       );
     }
 });
 
-},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
+},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./scoring.jsx":"/Users/David/dev/whose-tweet/js/app/scoring.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
 var _ = require('underscore');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 

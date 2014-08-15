@@ -134,3 +134,35 @@ body {
     float:left;
   }
 }
+
+.scoring {
+  height: 10px;
+  background: none;
+  margin-top: 70px;
+  position: absolute;
+  left: 0;
+  top: -17px;
+  width: 100%;
+  padding: 0;
+  span {
+    position: absolute;
+    right:0;
+    top:10px;
+    font-family: 'Handlee', cursive;
+    font-size:15px;
+    background: @red;
+    color:white;
+    padding:15px;
+    width:118px;
+  }
+  div {
+    width:100%;
+    height: 100%;
+    background: @red;
+    float:right;
+    transition: width 60s linear;
+    &.mounted {
+      width:0%;
+    }
+  }
+}
