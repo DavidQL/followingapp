@@ -39,14 +39,26 @@ module.exports = React.createClass({
             people: [{}, {}, {}]
           }]
         },
-        round: 1
+        round: 1,
+        gameOver: false
       };
     },
 
     advanceRound: function() {
+      // TODO: add points for advancing rounds
       this.setState({
         game_data: this.state.game_data,
         round: this.state.round + 1
+      });
+    },
+
+    reportGameOver: function() {
+      this.setState({gameOver: true});
+    },
+
+    receiveScore: function(score) {
+      this.setState({
+        score: score
       });
     },
 
@@ -54,8 +66,21 @@ module.exports = React.createClass({
       return (
         <div>
           <RoundCounter round={this.state.round}/>
-          <Scoring />
-          <Question game_data={this.state.game_data} round={this.state.round} advanceRound={this.advanceRound} />
+
+          {
+            (function() {
+              if (this.state.gameOver) {
+                return <div>Game over, score: {this.state.score} </div>
+              } else {
+                return (
+                  <div>
+                    <Scoring reportGameOver={this.reportGameOver} reportScore={this.receiveScore}/>
+                    <Question game_data={this.state.game_data} round={this.state.round} advanceRound={this.advanceRound} reportGameOver={this.reportGameOver}/>
+                  </div>
+                );
+              }
+            }.bind(this))()
+          }
         </div>
       );
     }

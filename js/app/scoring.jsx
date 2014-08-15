@@ -9,6 +9,10 @@ module.exports = React.createClass({
       };
     },
 
+    componentWillUnmount: function() {
+      clearInterval(this.scoreInterval);
+    },
+
     componentDidMount: function() {
       setTimeout(function() {
         this.setState({
@@ -16,10 +20,16 @@ module.exports = React.createClass({
         });
       }.bind(this), 0);
 
-      setInterval(function() {
+      this.scoreInterval = setInterval(function() {
+        if (this.state.score === 0) {
+          this.props.reportGameOver();
+        }
+
         this.setState({
           score: this.state.score - 83 <= 0 ? 0 : this.state.score - 83
         });
+        // TODO: I want to report this just once inside componentWillUnmount(), but this code errors when run inside that function
+        this.props.reportScore(this.state.score);
       }.bind(this), 500);
     },
 

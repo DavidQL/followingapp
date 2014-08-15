@@ -12,12 +12,7 @@ module.exports = {
 
     handleFail: function() {
       if (this.state.attempt >= 3) {
-        this.setState({
-          alert: {
-            text: "Wrong! Game over",
-            type: "Error"
-          }
-        });
+        this.props.reportGameOver();
         return;
       }
 

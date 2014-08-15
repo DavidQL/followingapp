@@ -29570,16 +29570,16 @@ module.exports = React.createClass({displayName: 'exports',
       var Question = (function() {
         switch(this.props.round) {
         case 1: 
-          return Round1({game_data: this.props.game_data.round1, advanceRound: this.props.advanceRound})
+          return Round1({game_data: this.props.game_data.round1, advanceRound: this.props.advanceRound, reportGameOver: this.props.reportGameOver})
           break;
         case 2:
-          return Round2({game_data: this.props.game_data.round2, advanceRound: this.props.advanceRound})
+          return Round2({game_data: this.props.game_data.round2, advanceRound: this.props.advanceRound, reportGameOver: this.props.reportGameOver})
           break;
         case 3:
-          return Round3({game_data: this.props.game_data.round3, advanceRound: this.props.advanceRound})
+          return Round3({game_data: this.props.game_data.round3, advanceRound: this.props.advanceRound, reportGameOver: this.props.reportGameOver})
           break;
         case 4:
-          return Round4({game_data: this.props.game_data.round4, advanceRound: this.props.advanceRound})
+          return Round4({game_data: this.props.game_data.round4, advanceRound: this.props.advanceRound, reportGameOver: this.props.reportGameOver})
           break;
         }
       }.bind(this))();
@@ -29605,12 +29605,7 @@ module.exports = {
 
     handleFail: function() {
       if (this.state.attempt >= 3) {
-        this.setState({
-          alert: {
-            text: "Wrong! Game over",
-            type: "Error"
-          }
-        });
+        this.props.reportGameOver();
         return;
       }
 
@@ -29884,6 +29879,10 @@ module.exports = React.createClass({displayName: 'exports',
       };
     },
 
+    componentWillUnmount: function() {
+      clearInterval(this.scoreInterval);
+    },
+
     componentDidMount: function() {
       setTimeout(function() {
         this.setState({
@@ -29891,10 +29890,16 @@ module.exports = React.createClass({displayName: 'exports',
         });
       }.bind(this), 0);
 
-      setInterval(function() {
+      this.scoreInterval = setInterval(function() {
+        if (this.state.score === 0) {
+          this.props.reportGameOver();
+        }
+
         this.setState({
           score: this.state.score - 83 <= 0 ? 0 : this.state.score - 83
         });
+        // TODO: I want to report this just once inside componentWillUnmount(), but this code errors when run inside that function
+        this.props.reportScore(this.state.score);
       }.bind(this), 500);
     },
 
@@ -29951,14 +29956,26 @@ module.exports = React.createClass({displayName: 'exports',
             people: [{}, {}, {}]
           }]
         },
-        round: 1
+        round: 1,
+        gameOver: false
       };
     },
 
     advanceRound: function() {
+      // TODO: add points for advancing rounds
       this.setState({
         game_data: this.state.game_data,
         round: this.state.round + 1
+      });
+    },
+
+    reportGameOver: function() {
+      this.setState({gameOver: true});
+    },
+
+    receiveScore: function(score) {
+      this.setState({
+        score: score
       });
     },
 
@@ -29966,8 +29983,21 @@ module.exports = React.createClass({displayName: 'exports',
       return (
         React.DOM.div(null, 
           RoundCounter({round: this.state.round}), 
-          Scoring(null), 
-          Question({game_data: this.state.game_data, round: this.state.round, advanceRound: this.advanceRound})
+
+          
+            (function() {
+              if (this.state.gameOver) {
+                return React.DOM.div(null, "Game over, score: ", this.state.score, " ")
+              } else {
+                return (
+                  React.DOM.div(null, 
+                    Scoring({reportGameOver: this.reportGameOver, reportScore: this.receiveScore}), 
+                    Question({game_data: this.state.game_data, round: this.state.round, advanceRound: this.advanceRound, reportGameOver: this.reportGameOver})
+                  )
+                );
+              }
+            }.bind(this))()
+          
         )
       );
     }

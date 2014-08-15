@@ -9,16 +9,16 @@ module.exports = React.createClass({
       var Question = (function() {
         switch(this.props.round) {
         case 1: 
-          return <Round1 game_data={this.props.game_data.round1} advanceRound={this.props.advanceRound}/>
+          return <Round1 game_data={this.props.game_data.round1} advanceRound={this.props.advanceRound} reportGameOver={this.props.reportGameOver}/>
           break;
         case 2:
-          return <Round2 game_data={this.props.game_data.round2} advanceRound={this.props.advanceRound}/>
+          return <Round2 game_data={this.props.game_data.round2} advanceRound={this.props.advanceRound} reportGameOver={this.props.reportGameOver}/>
           break;
         case 3:
-          return <Round3 game_data={this.props.game_data.round3} advanceRound={this.props.advanceRound}/>
+          return <Round3 game_data={this.props.game_data.round3} advanceRound={this.props.advanceRound} reportGameOver={this.props.reportGameOver}/>
           break;
         case 4:
-          return <Round4 game_data={this.props.game_data.round4} advanceRound={this.props.advanceRound}/>
+          return <Round4 game_data={this.props.game_data.round4} advanceRound={this.props.advanceRound} reportGameOver={this.props.reportGameOver}/>
           break;
         }
       }.bind(this))();
