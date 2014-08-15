@@ -29537,7 +29537,28 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{"./../../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","moment":"/Users/David/dev/whose-tweet/node_modules/moment/moment.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/index.jsx":[function(require,module,exports){
+},{"./../../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","moment":"/Users/David/dev/whose-tweet/node_modules/moment/moment.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/components/tweet_source_gallery.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../../../bower_components/react/react-with-addons');
+var _ = require('underscore');
+var $ = require('./../../../../bower_components/jquery/dist/jquery');
+
+module.exports = React.createClass({displayName: 'exports',
+    render: function() {
+      var Sources = _.map(this.props.game_data[this.props.attempt - 1].uniqueTweetSources, function(source) {
+        var isCorrect = this.props.game_data[this.props.attempt - 1].tweet.readable_source === source ? "correct" : "";
+        return React.DOM.span({onClick: this.props.onChoose.bind(null, source), className: isCorrect}, source)
+      }, this);
+      return (
+        React.DOM.div({className: "row"}, 
+          React.DOM.div({className: "text-center tweet-sources-gallery center-block"}, 
+            Sources
+          )
+        )
+      );
+    }
+});
+
+},{"./../../../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/index.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
 var Round1 = require('./round1.jsx');
 var Round2 = require('./round2.jsx');
@@ -29558,7 +29579,7 @@ module.exports = React.createClass({displayName: 'exports',
           return Round3({game_data: this.props.game_data.round3, advanceRound: this.props.advanceRound})
           break;
         case 4:
-          return Round4(null)
+          return Round4({game_data: this.props.game_data.round4, advanceRound: this.props.advanceRound})
           break;
         }
       }.bind(this))();
@@ -29711,7 +29732,7 @@ module.exports = React.createClass({displayName: 'exports',
         selectedUserId: user.id
       });
       $('body').animate({
-        scrollTop: $(this.refs.profile_banner_callout.getDOMNode()).position().top
+        scrollTop: $(this.refs.secondary_callout.getDOMNode()).position().top
       });
     },
 
@@ -29745,10 +29766,10 @@ module.exports = React.createClass({displayName: 'exports',
           React.DOM.div({className: "col-md-6 question"}, 
             Tweet({game_data: this.props.game_data, attempt: this.state.attempt}), 
             AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.onChooseAvatar, showHandles: false, selectedUserId: this.state.selectedUserId}), 
-            React.DOM.span({ref: "profile_banner_callout", className: "callout col-md-9 center-block text-center"}, 
+            React.DOM.span({ref: "secondary_callout", className: "callout col-md-9 center-block text-center"}, 
               React.DOM.strong(null, "And"), " what's their profile banner?"
             ), 
-            ProfileBackgroundGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.onChooseProfileBackground, showHandles: false})
+            ProfileBackgroundGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.onChooseProfileBackground})
           )
         );
       }
@@ -29760,16 +29781,71 @@ module.exports = React.createClass({displayName: 'exports',
 
 },{"./../../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","./components/profile_background_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/profile_background_gallery.jsx","./components/tweet.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx","./mixins/question_base.jsx":"/Users/David/dev/whose-tweet/js/app/question/mixins/question_base.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/question/round4.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../../bower_components/react/react-with-addons');
+var $ = require('./../../../bower_components/jquery/dist/jquery');
+var _ = require('underscore');
+var AvatarGallery = require('./components/avatar_gallery.jsx');
+var TweetSourceGallery = require('./components/tweet_source_gallery.jsx');
+var Tweet = require('./components/tweet.jsx');
+var Alert = require('./components/alert.jsx');
+var QuestionBase = require('./mixins/question_base.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
+    mixins: [QuestionBase],
+
+    onChooseAvatar: function(user) {
+      var avatar_correct = this.props.game_data[this.state.attempt - 1].tweet.author_id === user.id;
+      this.setState({
+        avatar_correct: avatar_correct,
+        selectedUserId: user.id
+      });
+      $('body').animate({
+        scrollTop: $(this.refs.secondary_callout.getDOMNode()).position().top
+      });
+    },
+
+    onChooseTweetSource: function(source) {
+      var tweet_source_correct = this.props.game_data[this.state.attempt - 1].tweet.readable_source === source;
+
+      if (tweet_source_correct && this.state.avatar_correct) {
+        this.setState({
+          attempt: this.state.attempt + 1,
+          alert: {
+            text: "Nice! You win!",
+            type: "Success"
+          }
+        });
+      } else {
+        this.handleFail();
+      }
+    },
+
     render: function() {
+      var Component;
+      if (this.state.alert) {
+        Component = (
+          React.DOM.div({className: "col-md-6 question"}, 
+            Alert({data: this.state.alert})
+          )
+        )
+      } else {
+        Component = (
+          React.DOM.div({className: "col-md-6 question"}, 
+            Tweet({game_data: this.props.game_data, attempt: this.state.attempt}), 
+            AvatarGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.onChooseAvatar, showHandles: false, selectedUserId: this.state.selectedUserId}), 
+            React.DOM.span({ref: "secondary_callout", className: "callout col-md-9 center-block text-center"}, 
+              React.DOM.strong(null, "And"), " how did they send that tweet?"
+            ), 
+            TweetSourceGallery({game_data: this.props.game_data, attempt: this.state.attempt, onChoose: this.onChooseTweetSource})
+          )
+        );
+      }
       return (
-        React.DOM.div(null, "Round 4")
+        Component
       );
     }
 });
 
-},{"./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js"}],"/Users/David/dev/whose-tweet/js/app/round_counter.jsx":[function(require,module,exports){
+},{"./../../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./components/avatar_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/avatar_gallery.jsx","./components/tweet.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet.jsx","./components/tweet_source_gallery.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/tweet_source_gallery.jsx","./mixins/question_base.jsx":"/Users/David/dev/whose-tweet/js/app/question/mixins/question_base.jsx","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/round_counter.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
 var _ = require('underscore');
 
@@ -29832,8 +29908,12 @@ module.exports = React.createClass({displayName: 'exports',
             tweet: {},
             people: [{}, {}, {}]
           }],
+          round4: [{
+            tweet: {},
+            people: [{}, {}, {}]
+          }]
         },
-        round: 1
+        round: 4
       };
     },
 
@@ -29856,7 +29936,10 @@ module.exports = React.createClass({displayName: 'exports',
 
 },{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
 var _ = require('underscore');
+var $ = require('./../../bower_components/jquery/dist/jquery');
+
 var usedTweetIds = [];
+
 var getRandomPeople = function(opts) {
   var people = [opts.tweet.user];
       people.push(
@@ -29877,19 +29960,7 @@ var getRandomPeople = function(opts) {
     };
   });
 };
-var roundDataPresenter = function(opts) {
-  var tweet = opts.tweet;
-  var people = opts.people;
-  return {
-    tweet: {
-      body: tweet.text,
-      date: tweet.created_at,
-      author_id: tweet.user.id,
-      id: tweet.id
-    },
-    people: _.shuffle(people)
-  }; 
-};
+
 var generateRound = function(opts) {
   var randomTweets = 
     _.chain(opts.tweets)
@@ -29902,11 +29973,32 @@ var generateRound = function(opts) {
   return randomTweets.map(function(tweet) {
     var people = getRandomPeople({tweet: tweet, uniqueUsers: opts.uniqueUsers, count: opts.peopleCount});
     usedTweetIds.push(tweet.id);
-    return roundDataPresenter({tweet: tweet, people: people});
+    return {
+      tweet: {
+        body: tweet.text,
+        date: tweet.created_at,
+        author_id: tweet.user.id,
+        id: tweet.id,
+        source: tweet.source,
+        readable_source: tweet.readable_source
+      },
+      people: _.shuffle(people),
+      uniqueTweetSources: (function() {
+        if (opts.uniqueTweetSources) {
+          opts.uniqueTweetSources.push(tweet.readable_source)
+          return _.uniq(opts.uniqueTweetSources);
+        }
+      })()
+    }; 
   });
 };
 
 module.exports = function(tweets) {
+  var tweets = _.map(tweets, function(tweet) {
+    return _.extend(tweet, {
+      readable_source: $(tweet.source).text()
+    });
+  });
   var uniqueUsers = 
     _.chain(tweets)
     .map(function(tweet) {
@@ -29915,10 +30007,19 @@ module.exports = function(tweets) {
     .uniq(function(user) {
       return user.id;
     });
+  var uniqueTweetSources = 
+    _.chain(tweets)
+    .map(function(tweet) {
+      return tweet.readable_source;
+    })
+    .uniq()
+    .sample(5)
+    .value();
+
   var round1 = generateRound({tweets: tweets, peopleCount: 2, uniqueUsers: uniqueUsers});
   var round2 = generateRound({tweets: tweets, peopleCount: 6, uniqueUsers: uniqueUsers});
   var round3 = generateRound({tweets: tweets, peopleCount: 6, uniqueUsers: uniqueUsers});
-  var round4 = {};
+  var round4 = generateRound({tweets: tweets, peopleCount: 6, uniqueUsers: uniqueUsers, uniqueTweetSources: uniqueTweetSources});
 
   return {
     round1: round1,
@@ -29927,7 +30028,7 @@ module.exports = function(tweets) {
     round4: round4
   };
 };
-},{"underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
+},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
 /** @jsx React.DOM */(function() {
   var _ = require('underscore');
   var $ = require('./../bower_components/jquery/dist/jquery');

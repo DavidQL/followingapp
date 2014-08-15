@@ -17,7 +17,7 @@ module.exports = React.createClass({
         selectedUserId: user.id
       });
       $('body').animate({
-        scrollTop: $(this.refs.profile_banner_callout.getDOMNode()).position().top
+        scrollTop: $(this.refs.secondary_callout.getDOMNode()).position().top
       });
     },
 
@@ -51,10 +51,10 @@ module.exports = React.createClass({
           <div className="col-md-6 question">
             <Tweet game_data={this.props.game_data} attempt={this.state.attempt}/>
             <AvatarGallery game_data={this.props.game_data} attempt={this.state.attempt} onChoose={this.onChooseAvatar} showHandles={false} selectedUserId={this.state.selectedUserId}/>
-            <span ref="profile_banner_callout" className="callout col-md-9 center-block text-center">
+            <span ref="secondary_callout" className="callout col-md-9 center-block text-center">
               <strong>And</strong> what's their profile banner?
             </span>
-            <ProfileBackgroundGallery game_data={this.props.game_data} attempt={this.state.attempt} onChoose={this.onChooseProfileBackground} showHandles={false} />
+            <ProfileBackgroundGallery game_data={this.props.game_data} attempt={this.state.attempt} onChoose={this.onChooseProfileBackground}/>
           </div>
         );
       }

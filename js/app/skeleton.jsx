@@ -33,8 +33,12 @@ module.exports = React.createClass({
             tweet: {},
             people: [{}, {}, {}]
           }],
+          round4: [{
+            tweet: {},
+            people: [{}, {}, {}]
+          }]
         },
-        round: 1
+        round: 4
       };
     },
 
