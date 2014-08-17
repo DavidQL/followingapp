@@ -7,7 +7,7 @@ module.exports = React.createClass({
         <div className="col-md-3 round-counter">
           {
             _.times(4, function(i) {
-              var className = (this.props.round === i + 1 ? 'active round col-md-10' : 'round col-md-10');
+              var className = (this.props.round === i + 1 ? 'active round col-md-10' : 'round col-md-10 hidden-sm hidden-xs');
               return (
                 <div className={className}>
                   <span>{"Round " + (i + 1)}</span>

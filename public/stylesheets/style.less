@@ -134,8 +134,30 @@ body {
     float:left;
   }
 }
+@media (max-width: 991px) {
+  .round-counter {
+    margin-top: 50px;
+  }
+  .round {
+    padding-bottom:30px;
+  }
+}
 
-.scoring {
+span.score {
+  position: absolute;
+  right: 50%;
+  top: 53px;
+  font-family: 'Handlee',cursive;
+  font-size: 15px;
+  background: @red;
+  color: white;
+  padding: 5px 15px;
+  width: 118px;
+  margin-right: -59px;
+  z-index:1;
+}
+
+.timer {
   height: 10px;
   background: none;
   margin-top: 70px;
@@ -144,17 +166,6 @@ body {
   top: -17px;
   width: 100%;
   padding: 0;
-  span {
-    position: absolute;
-    right:0;
-    top:10px;
-    font-family: 'Handlee', cursive;
-    font-size:15px;
-    background: @red;
-    color:white;
-    padding:15px;
-    width:118px;
-  }
   div {
     width:100%;
     height: 100%;

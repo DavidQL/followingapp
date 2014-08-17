@@ -29802,13 +29802,8 @@ module.exports = React.createClass({displayName: 'exports',
       var tweet_source_correct = this.props.game_data[this.state.attempt - 1].tweet.readable_source === source;
 
       if (tweet_source_correct && this.state.avatar_correct) {
-        this.setState({
-          attempt: this.state.attempt + 1,
-          alert: {
-            text: "Nice! You win!",
-            type: "Success"
-          }
-        });
+        this.props.advanceRound();
+        this.props.reportGameOver({won: true});
       } else {
         this.handleFail();
       }
@@ -29850,7 +29845,7 @@ module.exports = React.createClass({displayName: 'exports',
         React.DOM.div({className: "col-md-3 round-counter"}, 
           
             _.times(4, function(i) {
-              var className = (this.props.round === i + 1 ? 'active round col-md-10' : 'round col-md-10');
+              var className = (this.props.round === i + 1 ? 'active round col-md-10' : 'round col-md-10 hidden-sm hidden-xs');
               return (
                 React.DOM.div({className: className}, 
                   React.DOM.span(null, "Round " + (i + 1)), 
@@ -29867,59 +29862,12 @@ module.exports = React.createClass({displayName: 'exports',
       );
     }
 });
-},{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/scoring.jsx":[function(require,module,exports){
-/** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
-var _ = require('underscore');
-
-module.exports = React.createClass({displayName: 'exports',
-    getInitialState: function() {
-      return {
-        is_mounted: false,
-        score: 10000
-      };
-    },
-
-    componentWillUnmount: function() {
-      clearInterval(this.scoreInterval);
-    },
-
-    componentDidMount: function() {
-      setTimeout(function() {
-        this.setState({
-          is_mounted: true
-        });
-      }.bind(this), 0);
-
-      this.scoreInterval = setInterval(function() {
-        if (this.state.score === 0) {
-          this.props.reportGameOver();
-        }
-
-        this.setState({
-          score: this.state.score - 83 <= 0 ? 0 : this.state.score - 83
-        });
-        // TODO: I want to report this just once inside componentWillUnmount(), but this code errors when run inside that function
-        this.props.reportScore(this.state.score);
-      }.bind(this), 500);
-    },
-
-    render: function() {
-      var mounted_classname = this.state.is_mounted ? 'mounted' : '';
-      return (
-        React.DOM.div({className: "scoring"}, 
-          React.DOM.span({className: "score " + mounted_classname}, "Score: " + this.state.score), 
-          React.DOM.div({className: mounted_classname})
-        )
-      );
-    }
-});
-
 },{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/skeleton.jsx":[function(require,module,exports){
 /** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 var streamParser = require('./stream_parser');
 var RoundCounter = require('./round_counter.jsx');
-var Scoring = require('./scoring.jsx');
+var Timer = require('./timer.jsx');
 var Question = require('./question/index.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
@@ -29956,8 +29904,9 @@ module.exports = React.createClass({displayName: 'exports',
             people: [{}, {}, {}]
           }]
         },
-        round: 1,
-        gameOver: false
+        round: 4,
+        gameOver: false,
+        score: 0
       };
     },
 
@@ -29965,12 +29914,20 @@ module.exports = React.createClass({displayName: 'exports',
       // TODO: add points for advancing rounds
       this.setState({
         game_data: this.state.game_data,
-        round: this.state.round + 1
+        round: this.state.round + 1,
+        score: this.state.score + (this.state.round * this.state.round * 100)
       });
     },
 
-    reportGameOver: function() {
-      this.setState({gameOver: true});
+    reportGameOver: function(opts) {
+      this.setState({
+        gameOver: true,
+        won: opts.won
+      });
+    },
+
+    reportSecondsLeft: function(seconds) {
+
     },
 
     receiveScore: function(score) {
@@ -29980,6 +29937,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
 
     render: function() {
+      var game_over_message = this.state.gameOver && this.state.won ? "You won!" : "Game over. You lose";
       return (
         React.DOM.div(null, 
           RoundCounter({round: this.state.round}), 
@@ -29987,11 +29945,12 @@ module.exports = React.createClass({displayName: 'exports',
           
             (function() {
               if (this.state.gameOver) {
-                return React.DOM.div(null, "Game over, score: ", this.state.score, " ")
+                return React.DOM.div(null, game_over_message, ", score: ", this.state.score, " ")
               } else {
                 return (
                   React.DOM.div(null, 
-                    Scoring({reportGameOver: this.reportGameOver, reportScore: this.receiveScore}), 
+                    React.DOM.span({className: "score"}, "Score: ", this.state.score), 
+                    Timer({reportSecondsLeft: this.reportSecondsLeft}), 
                     Question({game_data: this.state.game_data, round: this.state.round, advanceRound: this.advanceRound, reportGameOver: this.reportGameOver})
                   )
                 );
@@ -30003,7 +29962,7 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./scoring.jsx":"/Users/David/dev/whose-tweet/js/app/scoring.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
+},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js","./timer.jsx":"/Users/David/dev/whose-tweet/js/app/timer.jsx"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
 var _ = require('underscore');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 
@@ -30097,7 +30056,49 @@ module.exports = function(tweets) {
     round4: round4
   };
 };
-},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
+},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/timer.jsx":[function(require,module,exports){
+/** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
+var _ = require('underscore');
+
+module.exports = React.createClass({displayName: 'exports',
+    getInitialState: function() {
+      return {
+        is_mounted: false,
+        secondsLeft: 60
+      };
+    },
+
+    componentWillUnmount: function() {
+      clearInterval(this.timeInterval);
+    },
+
+    componentDidMount: function() {
+      setTimeout(function() {
+        this.setState({
+          is_mounted: true
+        });
+      }.bind(this), 0);
+
+      this.timeInterval = setInterval(function() {
+        this.setState({
+          secondsLeft: this.state.secondsLeft - 1 <= 0 ? 0 : this.state.secondsLeft - 1
+        });
+        // TODO: I want to report this just once inside componentWillUnmount(), but this code errors when run inside that function
+        this.props.reportSecondsLeft(this.state.secondsLeft);
+      }.bind(this), 500);
+    },
+
+    render: function() {
+      var mounted_classname = this.state.is_mounted ? 'mounted' : '';
+      return (
+        React.DOM.div({className: "timer"}, 
+          React.DOM.div({className: mounted_classname})
+        )
+      );
+    }
+});
+
+},{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
 /** @jsx React.DOM */(function() {
   var _ = require('underscore');
   var $ = require('./../bower_components/jquery/dist/jquery');

@@ -25,13 +25,8 @@ module.exports = React.createClass({
       var tweet_source_correct = this.props.game_data[this.state.attempt - 1].tweet.readable_source === source;
 
       if (tweet_source_correct && this.state.avatar_correct) {
-        this.setState({
-          attempt: this.state.attempt + 1,
-          alert: {
-            text: "Nice! You win!",
-            type: "Success"
-          }
-        });
+        this.props.advanceRound();
+        this.props.reportGameOver({won: true});
       } else {
         this.handleFail();
       }

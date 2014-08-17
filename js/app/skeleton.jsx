@@ -2,7 +2,7 @@ var React = require('./../../bower_components/react/react-with-addons');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 var streamParser = require('./stream_parser');
 var RoundCounter = require('./round_counter.jsx');
-var Scoring = require('./scoring.jsx');
+var Timer = require('./timer.jsx');
 var Question = require('./question/index.jsx');
 
 module.exports = React.createClass({
@@ -39,8 +39,9 @@ module.exports = React.createClass({
             people: [{}, {}, {}]
           }]
         },
-        round: 1,
-        gameOver: false
+        round: 4,
+        gameOver: false,
+        score: 0
       };
     },
 
@@ -48,12 +49,20 @@ module.exports = React.createClass({
       // TODO: add points for advancing rounds
       this.setState({
         game_data: this.state.game_data,
-        round: this.state.round + 1
+        round: this.state.round + 1,
+        score: this.state.score + (this.state.round * this.state.round * 100)
       });
     },
 
-    reportGameOver: function() {
-      this.setState({gameOver: true});
+    reportGameOver: function(opts) {
+      this.setState({
+        gameOver: true,
+        won: opts.won
+      });
+    },
+
+    reportSecondsLeft: function(seconds) {
+
     },
 
     receiveScore: function(score) {
@@ -63,6 +72,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
+      var game_over_message = this.state.gameOver && this.state.won ? "You won!" : "Game over. You lose";
       return (
         <div>
           <RoundCounter round={this.state.round}/>
@@ -70,11 +80,12 @@ module.exports = React.createClass({
           {
             (function() {
               if (this.state.gameOver) {
-                return <div>Game over, score: {this.state.score} </div>
+                return <div>{game_over_message}, score: {this.state.score} </div>
               } else {
                 return (
                   <div>
-                    <Scoring reportGameOver={this.reportGameOver} reportScore={this.receiveScore}/>
+                    <span className="score">Score: {this.state.score}</span>
+                    <Timer reportSecondsLeft={this.reportSecondsLeft} />
                     <Question game_data={this.state.game_data} round={this.state.round} advanceRound={this.advanceRound} reportGameOver={this.reportGameOver}/>
                   </div>
                 );
