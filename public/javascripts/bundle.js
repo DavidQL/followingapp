@@ -29451,6 +29451,29 @@ var _ = require('underscore');
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
       var className = "alert " + (this.props.type || this.props.data.type) + ' ' + this.props.className;
+      if (this.props.gameOver && this.props.type === "Success") {
+        return (
+          React.DOM.div({className: className}, 
+            "You won!" + ' ' +
+            "Time bonus: ", this.props.timeBonus, 
+            "Final score: ", this.props.score + this.props.timeBonus, 
+
+            React.DOM.a({href: "#", onClick: this.tweetMessage}, "Tell your friends!")
+          )
+        );
+      }
+      if (this.props.gameOver && this.props.type === "Error") {
+        return (
+          React.DOM.div({className: className}, 
+            "Game over!" + ' ' +
+            "Time bonus: 0" + ' ' +
+            "Final score: ", this.props.score, 
+
+            "You got to round ", this.props.round, ", ", React.DOM.a({href: "#", onClick: this.tweetMessage}, "tell your friends!"), "!", 
+            React.DOM.button({onClick: this.playAgain}, "Play again!")
+          )
+        );
+      }
       return (
         React.DOM.div({className: className}, 
           this.props.text || this.props.data.text
@@ -29468,15 +29491,16 @@ module.exports = React.createClass({displayName: 'exports',
       var Avatars = _.map(this.props.game_data[this.props.attempt - 1].people, function(person) {
         var img_url = person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger");
         var selected = this.props.selectedUserId === person.id ? 'selected' : '';
+        var correctAnswerClass = this.props.game_data[this.props.attempt - 1].tweet.author_id === person.id ? "correct": "";
         if (this.props.showHandles) {
            return (
             React.DOM.div({className: "wrapped-image"}, 
-              React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person), className: selected}), 
+              React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person), className: selected + ' ' + correctAnswerClass}), 
               React.DOM.span({className: "handle"}, "@", person.screen_name)
             )
           );         
         }
-        return React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person), className: selected});
+        return React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person), className: selected + ' ' + correctAnswerClass});
       }, this);
       return (
         React.DOM.div({className: "row"}, 
@@ -29497,10 +29521,11 @@ module.exports = React.createClass({displayName: 'exports',
       // TODO: on image load fail replace with no-profile-background
       var ProfileImgs = _.map(this.props.game_data[this.props.attempt - 1].people, function(person) {
         var img_url = person.profile_banner_url && person.profile_banner_url + "/300x100";
+        var correctAnswerClass = this.props.game_data[this.props.attempt - 1].tweet.author_id === person.id ? "correct": "";
         if (!img_url) {
-          return React.DOM.div({className: "no-profile-background", onClick: this.props.onChoose.bind(null, person)}, React.DOM.span(null, "@", person.screen_name))
+          return React.DOM.div({className: "no-profile-background " + correctAnswerClass, onClick: this.props.onChoose.bind(null, person)}, React.DOM.span(null, "@", person.screen_name))
         }
-        return React.DOM.img({src: img_url, onClick: this.props.onChoose.bind(null, person)});
+        return React.DOM.img({className: correctAnswerClass, src: img_url, onClick: this.props.onChoose.bind(null, person)});
       }, this);
       return (
         React.DOM.div({className: "row"}, 
@@ -29615,7 +29640,7 @@ module.exports = {
       this.setState({
         attempt: this.state.attempt + 1,
         alert: {
-          text: "Wrong! Now at attempt " + (this.state.attempt + 1),
+          text: "Wrong! Now at attempt " + (this.state.attempt + 1) + " of 3.",
           type: "Error"
         }
       });
@@ -29886,6 +29911,12 @@ module.exports = React.createClass({displayName: 'exports',
         .fail(function(error) {
           console.err('Error fetching tweets');
         });
+
+      this.timerInterval = setInterval(function() {
+        this.setState({
+          secondsLeft: this.state.secondsLeft <= 0 ? 0 : this.state.secondsLeft - 1
+        });
+      }.bind(this), 1000);
     },
 
     getInitialState: function() {
@@ -29908,9 +29939,10 @@ module.exports = React.createClass({displayName: 'exports',
             people: [{}, {}, {}]
           }]
         },
-        round: 4,
+        round: 1,
         gameOver: false,
-        score: 0
+        score: 0,
+        secondsLeft: 60
       };
     },
 
@@ -29924,6 +29956,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
 
     reportGameOver: function(opts) {
+      clearInterval(this.timerInterval);
       this.setState({
         gameOver: true,
         won: opts.won,
@@ -29932,7 +29965,9 @@ module.exports = React.createClass({displayName: 'exports',
     },
 
     reportSecondsLeft: function(seconds) {
-
+      this.setState({
+        secondsLeft: seconds
+      });
     },
 
     receiveScore: function(score) {
@@ -29942,25 +29977,18 @@ module.exports = React.createClass({displayName: 'exports',
     },
 
     render: function() {
-      var game_over_message;
-      if (this.state.gameOver && this.state.alertType === "Error") {
-        game_over_message = "Game over. You lose";
-      } else {
-        game_over_message = "You won!";
-      }
+
       return (
         React.DOM.div(null, 
           RoundCounter({round: this.state.round}), 
-
           
             (function() {
               if (this.state.gameOver) {
-                return Alert({type: this.state.alertType, text: game_over_message, className: "col-md-6"})
+                return Alert({type: this.state.alertType, gameOver: this.state.gameOver, timeBonus: this.state.secondsLeft * 10, score: this.state.score, round: this.state.round, className: "col-md-6"})
               } else {
                 return (
                   React.DOM.div(null, 
                     React.DOM.span({className: "score"}, "Score: ", this.state.score), 
-                    Timer({reportSecondsLeft: this.reportSecondsLeft}), 
                     Question({game_data: this.state.game_data, round: this.state.round, advanceRound: this.advanceRound, reportGameOver: this.reportGameOver})
                   )
                 );
@@ -30104,7 +30132,7 @@ module.exports = React.createClass({displayName: 'exports',
         React.DOM.div({className: "timer"}, 
           React.DOM.div({className: mounted_classname}, 
             React.DOM.span(null, 
-              "Bonus points: " + this.state.secondsLeft * 10
+              "Time points: " + this.state.secondsLeft * 10
             )
           )
         )

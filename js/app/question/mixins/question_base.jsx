@@ -21,7 +21,7 @@ module.exports = {
       this.setState({
         attempt: this.state.attempt + 1,
         alert: {
-          text: "Wrong! Now at attempt " + (this.state.attempt + 1),
+          text: "Wrong! Now at attempt " + (this.state.attempt + 1) + " of 3.",
           type: "Error"
         }
       });

@@ -18,6 +18,12 @@ module.exports = React.createClass({
         .fail(function(error) {
           console.err('Error fetching tweets');
         });
+
+      this.timerInterval = setInterval(function() {
+        this.setState({
+          secondsLeft: this.state.secondsLeft <= 0 ? 0 : this.state.secondsLeft - 1
+        });
+      }.bind(this), 1000);
     },
 
     getInitialState: function() {
@@ -40,9 +46,10 @@ module.exports = React.createClass({
             people: [{}, {}, {}]
           }]
         },
-        round: 4,
+        round: 1,
         gameOver: false,
-        score: 0
+        score: 0,
+        secondsLeft: 60
       };
     },
 
@@ -56,6 +63,7 @@ module.exports = React.createClass({
     },
 
     reportGameOver: function(opts) {
+      clearInterval(this.timerInterval);
       this.setState({
         gameOver: true,
         won: opts.won,
@@ -64,7 +72,9 @@ module.exports = React.createClass({
     },
 
     reportSecondsLeft: function(seconds) {
-
+      this.setState({
+        secondsLeft: seconds
+      });
     },
 
     receiveScore: function(score) {
@@ -74,25 +84,18 @@ module.exports = React.createClass({
     },
 
     render: function() {
-      var game_over_message;
-      if (this.state.gameOver && this.state.alertType === "Error") {
-        game_over_message = "Game over. You lose";
-      } else {
-        game_over_message = "You won!";
-      }
+
       return (
         <div>
           <RoundCounter round={this.state.round}/>
-
           {
             (function() {
               if (this.state.gameOver) {
-                return <Alert type={this.state.alertType} text={game_over_message} className="col-md-6"/>
+                return <Alert type={this.state.alertType} gameOver={this.state.gameOver} timeBonus={this.state.secondsLeft * 10} score={this.state.score} round={this.state.round} className="col-md-6"/>
               } else {
                 return (
                   <div>
                     <span className="score">Score: {this.state.score}</span>
-                    <Timer reportSecondsLeft={this.reportSecondsLeft} />
                     <Question game_data={this.state.game_data} round={this.state.round} advanceRound={this.advanceRound} reportGameOver={this.reportGameOver}/>
                   </div>
                 );
