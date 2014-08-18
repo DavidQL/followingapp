@@ -3,9 +3,10 @@ var _ = require('underscore');
 
 module.exports = React.createClass({
     render: function() {
+      var className = "alert " + (this.props.type || this.props.data.type) + ' ' + this.props.className;
       return (
-        <div>
-          {this.props.data.text}
+        <div className={className}>
+          {this.props.text || this.props.data.text}
         </div>
       );
     }

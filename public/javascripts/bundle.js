@@ -29450,9 +29450,10 @@ var _ = require('underscore');
 
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
+      var className = "alert " + (this.props.type || this.props.data.type) + ' ' + this.props.className;
       return (
-        React.DOM.div(null, 
-          this.props.data.text
+        React.DOM.div({className: className}, 
+          this.props.text || this.props.data.text
         )
       );
     }
@@ -29605,7 +29606,9 @@ module.exports = {
 
     handleFail: function() {
       if (this.state.attempt >= 3) {
-        this.props.reportGameOver();
+        this.props.reportGameOver({
+          won: false
+        });
         return;
       }
 
@@ -29869,6 +29872,7 @@ var streamParser = require('./stream_parser');
 var RoundCounter = require('./round_counter.jsx');
 var Timer = require('./timer.jsx');
 var Question = require('./question/index.jsx');
+var Alert = require('./question/components/alert.jsx');
 
 module.exports = React.createClass({displayName: 'exports',
     componentDidMount: function() {
@@ -29922,7 +29926,8 @@ module.exports = React.createClass({displayName: 'exports',
     reportGameOver: function(opts) {
       this.setState({
         gameOver: true,
-        won: opts.won
+        won: opts.won,
+        alertType: opts.won ? "Success" : "Error"
       });
     },
 
@@ -29937,7 +29942,12 @@ module.exports = React.createClass({displayName: 'exports',
     },
 
     render: function() {
-      var game_over_message = this.state.gameOver && this.state.won ? "You won!" : "Game over. You lose";
+      var game_over_message;
+      if (this.state.gameOver && this.state.alertType === "Error") {
+        game_over_message = "Game over. You lose";
+      } else {
+        game_over_message = "You won!";
+      }
       return (
         React.DOM.div(null, 
           RoundCounter({round: this.state.round}), 
@@ -29945,7 +29955,7 @@ module.exports = React.createClass({displayName: 'exports',
           
             (function() {
               if (this.state.gameOver) {
-                return React.DOM.div(null, game_over_message, ", score: ", this.state.score, " ")
+                return Alert({type: this.state.alertType, text: game_over_message, className: "col-md-6"})
               } else {
                 return (
                   React.DOM.div(null, 
@@ -29962,7 +29972,7 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js","./timer.jsx":"/Users/David/dev/whose-tweet/js/app/timer.jsx"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
+},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js","./timer.jsx":"/Users/David/dev/whose-tweet/js/app/timer.jsx"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
 var _ = require('underscore');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 

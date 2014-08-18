@@ -12,7 +12,9 @@ module.exports = {
 
     handleFail: function() {
       if (this.state.attempt >= 3) {
-        this.props.reportGameOver();
+        this.props.reportGameOver({
+          won: false
+        });
         return;
       }
 

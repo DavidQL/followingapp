@@ -113,6 +113,24 @@ body {
 
 }
 
+.alert {
+  text-align: center;
+  color: white;
+  height: 161px;
+  font-family: 'Handlee';
+  font-size: 20px;
+  margin-top: 46px;
+  padding-top: 70px;
+  &.Error {
+    background: @red;
+    color: white;
+  }
+  &.Success {
+    background: #14a46c;
+    color: white;
+  }
+}
+
 .round-counter {
   margin-top: 70px;
 }
