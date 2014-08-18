@@ -110,7 +110,7 @@ body {
 
 .question {
   padding:20px;
-
+  margin-top:20px;
 }
 
 .alert {
@@ -169,14 +169,14 @@ span.score {
   font-size: 15px;
   background: @red;
   color: white;
-  padding: 5px 15px;
+  padding: 15px 15px 5px 15px;
   width: 118px;
   margin-right: -59px;
-  z-index:1;
+  text-align: center;
 }
 
 .timer {
-  height: 10px;
+  height: 15px;
   background: none;
   margin-top: 70px;
   position: absolute;
@@ -190,8 +190,18 @@ span.score {
     background: @red;
     float:right;
     transition: width 60s linear;
+    position:relative;
     &.mounted {
       width:0%;
+    }
+    span {
+      position: absolute;
+      left: 5px;
+      bottom: -3px;
+      color: white;
+      font-size: 15px;
+      font-family: 'Handlee',cursive;
+      width:200px;
     }
   }
 }

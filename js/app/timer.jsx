@@ -26,14 +26,18 @@ module.exports = React.createClass({
         });
         // TODO: I want to report this just once inside componentWillUnmount(), but this code errors when run inside that function
         this.props.reportSecondsLeft(this.state.secondsLeft);
-      }.bind(this), 500);
+      }.bind(this), 1000);
     },
 
     render: function() {
       var mounted_classname = this.state.is_mounted ? 'mounted' : '';
       return (
         <div className="timer">  
-          <div className={mounted_classname}></div>
+          <div className={mounted_classname}>
+            <span>
+              {"Bonus points: " + this.state.secondsLeft * 10}
+            </span>
+          </div>
         </div>
       );
     }
