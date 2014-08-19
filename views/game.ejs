@@ -14,11 +14,9 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Following</a>
         </div>
-        <div class="collapse navbar-collapse">
-          <div class="pull-right">
-            Logged in as <%= profile.screen_name %>
-            <img src="<%= profile.profile_image_url_https %>" alt="<%= profile.screen_name %>" />
-          </div>
+        <div class="logout">
+          <img src="<%= profile.profile_image_url_https %>" alt="<%= profile.screen_name %>" />
+          <a class="sign-out" href="/logout">Sign out</a>
         </div>
       </div>
     </nav>

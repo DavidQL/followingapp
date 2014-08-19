@@ -108,13 +108,40 @@ body {
 .navbar-default {
   background: @blue;
   border-bottom:2px solid @red;
+  .container {
+    position:relative;
+  }
+  .logout {
+    position: absolute;
+    right: 20px;
+    top: 0;
+  }
   .navbar-brand {
     color: white;
     font-size:31px;
     font-family: 'Handlee', cursive;
+    text-decoration: none;
+    &:hover {
+      color: white;
+      text-decoration: none;
+    }
   }
   color: white;
   border-radius: 0;
+  a.sign-out {
+    color:white;
+    font-family: 'Handlee', cursive;
+    position: relative;
+    top: 3px;
+    left: 7px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  img {
+    height: 40px;
+    margin-top: 6px;
+  }
 }
 
 .question {
@@ -227,5 +254,47 @@ span.score {
       font-family: 'Handlee',cursive;
       width:200px;
     }
+  }
+}
+
+.index {
+  h1 {
+    text-align: center;
+    font-family: 'Handlee',cursive;
+    color: @blue;
+    margin-bottom: 30px;
+  }
+  .rules {
+    ul {
+      font-family: Helvetica;
+      color: @red;
+      font-size: 15px;
+      li {
+        margin-bottom: 20px;
+      }
+    }
+  }
+  .btn-default {
+    width: 150px;
+    padding: 20px;
+    font-size: 15px;
+    clear: both;
+    position: relative;
+    top: 45px;
+    margin-bottom: 45px;
+    background: @blue;
+    color:white;
+    font-family: 'Handlee',cursive;
+    &:hover {
+      color:#ececec;
+    }
+  }
+  img {
+    box-shadow: 2px 2px 25px gray;
+  }
+}
+@media (max-width: 768px) {
+  .index .rules ul {
+    margin-top:30px;
   }
 }

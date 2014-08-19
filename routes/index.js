@@ -6,7 +6,7 @@ module.exports = function(app) {
     if (req.session.profile) {
       res.redirect('/game');
     } else {
-      res.render('index', { title: 'Whose Tweet Is It Anyway?'});
+      res.render('index', { title: 'Following'});
     }
   });
 };
