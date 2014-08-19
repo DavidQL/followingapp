@@ -2,7 +2,6 @@ var React = require('./../../bower_components/react/react-with-addons');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 var streamParser = require('./stream_parser');
 var RoundCounter = require('./round_counter.jsx');
-var Timer = require('./timer.jsx');
 var Question = require('./question/index.jsx');
 var Alert = require('./question/components/alert.jsx');
 
@@ -10,6 +9,7 @@ module.exports = React.createClass({
     componentDidMount: function() {
       $.get('/tweets')
         .done(function(tweets) {
+          this.tweets = tweets;
           this.setState({
             game_data: streamParser(tweets),
             round: this.state.round
@@ -71,6 +71,23 @@ module.exports = React.createClass({
       });
     },
 
+    resetGame: function() {
+      this.setState({
+        round: 1,
+        gameOver: false,
+        won: false,
+        score: 0,
+        secondsLeft: 60,
+        game_data: streamParser(this.tweets),
+      });
+
+      this.timerInterval = setInterval(function() {
+        this.setState({
+          secondsLeft: this.state.secondsLeft <= 0 ? 0 : this.state.secondsLeft - 1
+        });
+      }.bind(this), 1000);
+    },
+
     reportSecondsLeft: function(seconds) {
       this.setState({
         secondsLeft: seconds
@@ -91,7 +108,7 @@ module.exports = React.createClass({
           {
             (function() {
               if (this.state.gameOver) {
-                return <Alert type={this.state.alertType} gameOver={this.state.gameOver} timeBonus={this.state.secondsLeft * 10} score={this.state.score} round={this.state.round} className="col-md-6"/>
+                return <Alert type={this.state.alertType} gameOver={this.state.gameOver} timeBonus={this.state.secondsLeft * 10} score={this.state.score} round={this.state.round} resetGame={this.resetGame} className="col-md-6"/>
               } else {
                 return (
                   <div>

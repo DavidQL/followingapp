@@ -29452,25 +29452,34 @@ module.exports = React.createClass({displayName: 'exports',
     render: function() {
       var className = "alert " + (this.props.type || this.props.data.type) + ' ' + this.props.className;
       if (this.props.gameOver && this.props.type === "Success") {
+        var tweet_url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent("I just won #Following! How well do you know your timeline? Find out: game_url_here"); 
         return (
           React.DOM.div({className: className}, 
-            "You won!" + ' ' +
-            "Time bonus: ", this.props.timeBonus, 
-            "Final score: ", this.props.score + this.props.timeBonus, 
+            React.DOM.h2(null, "You won!"), 
+            React.DOM.span(null, "Time bonus: ", this.props.timeBonus), 
+            React.DOM.h3(null, "Final score: ", this.props.score + this.props.timeBonus), 
 
-            React.DOM.a({href: "#", onClick: this.tweetMessage}, "Tell your friends!")
+            React.DOM.a({href: tweet_url}, "Brag about it!"), 
+
+            React.DOM.button({className: "btn-lg", onClick: this.props.resetGame}, "Play again!")
           )
         );
       }
       if (this.props.gameOver && this.props.type === "Error") {
+        var tweet_text = "I got to round " + this.props.round + " on #Following. How well do you know your timeline? Find out: game_url_here";
+        var tweet_url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet_text); 
         return (
           React.DOM.div({className: className}, 
-            "Game over!" + ' ' +
-            "Time bonus: 0" + ' ' +
-            "Final score: ", this.props.score, 
+            React.DOM.h2(null, "Game over!"), 
+            React.DOM.span(null, "Time bonus: 0"), 
+            React.DOM.h3(null, "Final score: ", this.props.score), 
 
-            "You got to round ", this.props.round, ", ", React.DOM.a({href: "#", onClick: this.tweetMessage}, "tell your friends!"), "!", 
-            React.DOM.button({onClick: this.playAgain}, "Play again!")
+            React.DOM.span(null, 
+              "You got to round ", this.props.round, ",  ", 
+              React.DOM.a({href: tweet_url}, "brag about it!")
+            ), 
+
+            React.DOM.button({className: "btn-lg", onClick: this.props.resetGame}, "Play again!")
           )
         );
       }
@@ -29549,7 +29558,7 @@ module.exports = React.createClass({displayName: 'exports',
       return (
           React.DOM.div({className: "row"}, 
             React.DOM.div({className: "col-md-9 tweet center-block"}, 
-              this.props.game_data[game_data_index].tweet.body, 
+              _.unescape(this.props.game_data[game_data_index].tweet.body), 
               React.DOM.div({className: "date"}, 
                 formattedDate
               )
@@ -29895,7 +29904,6 @@ module.exports = React.createClass({displayName: 'exports',
 var $ = require('./../../bower_components/jquery/dist/jquery');
 var streamParser = require('./stream_parser');
 var RoundCounter = require('./round_counter.jsx');
-var Timer = require('./timer.jsx');
 var Question = require('./question/index.jsx');
 var Alert = require('./question/components/alert.jsx');
 
@@ -29903,6 +29911,7 @@ module.exports = React.createClass({displayName: 'exports',
     componentDidMount: function() {
       $.get('/tweets')
         .done(function(tweets) {
+          this.tweets = tweets;
           this.setState({
             game_data: streamParser(tweets),
             round: this.state.round
@@ -29964,6 +29973,23 @@ module.exports = React.createClass({displayName: 'exports',
       });
     },
 
+    resetGame: function() {
+      this.setState({
+        round: 1,
+        gameOver: false,
+        won: false,
+        score: 0,
+        secondsLeft: 60,
+        game_data: streamParser(this.tweets),
+      });
+
+      this.timerInterval = setInterval(function() {
+        this.setState({
+          secondsLeft: this.state.secondsLeft <= 0 ? 0 : this.state.secondsLeft - 1
+        });
+      }.bind(this), 1000);
+    },
+
     reportSecondsLeft: function(seconds) {
       this.setState({
         secondsLeft: seconds
@@ -29984,7 +30010,7 @@ module.exports = React.createClass({displayName: 'exports',
           
             (function() {
               if (this.state.gameOver) {
-                return Alert({type: this.state.alertType, gameOver: this.state.gameOver, timeBonus: this.state.secondsLeft * 10, score: this.state.score, round: this.state.round, className: "col-md-6"})
+                return Alert({type: this.state.alertType, gameOver: this.state.gameOver, timeBonus: this.state.secondsLeft * 10, score: this.state.score, round: this.state.round, resetGame: this.resetGame, className: "col-md-6"})
               } else {
                 return (
                   React.DOM.div(null, 
@@ -30000,7 +30026,7 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js","./timer.jsx":"/Users/David/dev/whose-tweet/js/app/timer.jsx"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
+},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","./question/components/alert.jsx":"/Users/David/dev/whose-tweet/js/app/question/components/alert.jsx","./question/index.jsx":"/Users/David/dev/whose-tweet/js/app/question/index.jsx","./round_counter.jsx":"/Users/David/dev/whose-tweet/js/app/round_counter.jsx","./stream_parser":"/Users/David/dev/whose-tweet/js/app/stream_parser.js"}],"/Users/David/dev/whose-tweet/js/app/stream_parser.js":[function(require,module,exports){
 var _ = require('underscore');
 var $ = require('./../../bower_components/jquery/dist/jquery');
 
@@ -30094,53 +30120,7 @@ module.exports = function(tweets) {
     round4: round4
   };
 };
-},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/app/timer.jsx":[function(require,module,exports){
-/** @jsx React.DOM */var React = require('./../../bower_components/react/react-with-addons');
-var _ = require('underscore');
-
-module.exports = React.createClass({displayName: 'exports',
-    getInitialState: function() {
-      return {
-        is_mounted: false,
-        secondsLeft: 60
-      };
-    },
-
-    componentWillUnmount: function() {
-      clearInterval(this.timeInterval);
-    },
-
-    componentDidMount: function() {
-      setTimeout(function() {
-        this.setState({
-          is_mounted: true
-        });
-      }.bind(this), 0);
-
-      this.timeInterval = setInterval(function() {
-        this.setState({
-          secondsLeft: this.state.secondsLeft - 1 <= 0 ? 0 : this.state.secondsLeft - 1
-        });
-        // TODO: I want to report this just once inside componentWillUnmount(), but this code errors when run inside that function
-        this.props.reportSecondsLeft(this.state.secondsLeft);
-      }.bind(this), 1000);
-    },
-
-    render: function() {
-      var mounted_classname = this.state.is_mounted ? 'mounted' : '';
-      return (
-        React.DOM.div({className: "timer"}, 
-          React.DOM.div({className: mounted_classname}, 
-            React.DOM.span(null, 
-              "Time points: " + this.state.secondsLeft * 10
-            )
-          )
-        )
-      );
-    }
-});
-
-},{"./../../bower_components/react/react-with-addons":"/Users/David/dev/whose-tweet/bower_components/react/react-with-addons.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
+},{"./../../bower_components/jquery/dist/jquery":"/Users/David/dev/whose-tweet/bower_components/jquery/dist/jquery.js","underscore":"/Users/David/dev/whose-tweet/node_modules/underscore/underscore.js"}],"/Users/David/dev/whose-tweet/js/main.jsx":[function(require,module,exports){
 /** @jsx React.DOM */(function() {
   var _ = require('underscore');
   var $ = require('./../bower_components/jquery/dist/jquery');

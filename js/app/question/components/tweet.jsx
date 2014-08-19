@@ -9,7 +9,7 @@ module.exports = React.createClass({
       return (
           <div className="row">
             <div className="col-md-9 tweet center-block">
-              {this.props.game_data[game_data_index].tweet.body}
+              {_.unescape(this.props.game_data[game_data_index].tweet.body)}
               <div className="date">
                 {formattedDate}
               </div>
