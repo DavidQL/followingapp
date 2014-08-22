@@ -102,7 +102,6 @@
 }
 
 body {
-  background: #ececec;
   font-family: Helvetica;
 }
 .navbar-default {
@@ -263,15 +262,30 @@ span.score {
     font-family: 'Handlee',cursive;
     color: @blue;
     margin-bottom: 30px;
+    text-transform: uppercase;
+  }
+  .tout {
+    margin:45px 0;
+    &:nth-child(even) {
+      img {
+        float:right;
+      }
+      ul {
+        float:left;
+      }
+    }
   }
   .rules {
     ul {
       font-family: Helvetica;
       color: @red;
-      font-size: 15px;
+      font-size: 20px;
       li {
         margin-bottom: 20px;
       }
+    }
+    img {
+      max-width:369px;
     }
   }
   .btn-default {
