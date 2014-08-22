@@ -15,9 +15,7 @@
     "body-parser": "~1.0.0",
     "debug": "~0.7.4",
     "ejs": "~0.8.5",
-    "less-middleware": "1.0.x"
-  },
-  "devDependencies": {
+    "less-middleware": "1.0.x",
     "oauth": "^0.9.12",
     "express-session": "^1.7.4",
     "underscore": "^1.6.0",
