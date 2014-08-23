@@ -10,7 +10,8 @@ var keys = (function() {
         return {
             "_twitterConsumerKey": process.env._twitterConsumerKey,
             "_twitterConsumerSecret": process.env._twitterConsumerKey,
-            "session_token": process.env.session_token
+            "session_token": process.env.session_token,
+            "env": "production"
         }
     }
     return require('./keys.json');
