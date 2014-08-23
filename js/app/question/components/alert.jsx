@@ -5,7 +5,7 @@ module.exports = React.createClass({
     render: function() {
       var className = "alert " + (this.props.type || this.props.data.type) + ' ' + this.props.className;
       if (this.props.gameOver && this.props.type === "Success") {
-        var tweet_url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent("I just won #Following! How well do you know your timeline? Find out: game_url_here"); 
+        var tweet_url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent("I just won #Following! How well do you know your timeline? Find out: http://followingapp.herokuapp.com"); 
         return (
           <div className={className}>
             <h2>You won!</h2>
@@ -19,7 +19,7 @@ module.exports = React.createClass({
         );
       }
       if (this.props.gameOver && this.props.type === "Error") {
-        var tweet_text = "I got to round " + this.props.round + " on #Following. How well do you know your timeline? Find out: game_url_here";
+        var tweet_text = "I got to round " + this.props.round + " on #Following. How well do you know your timeline? Find out: http://followingapp.herokuapp.com";
         var tweet_url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet_text); 
         return (
           <div className={className}>
