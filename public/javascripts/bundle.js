@@ -29961,12 +29961,12 @@ module.exports = React.createClass({displayName: 'exports',
     },
 
     advanceRound: function() {
-      // TODO: add points for advancing rounds
       this.setState({
         game_data: this.state.game_data,
         round: this.state.round + 1,
         score: this.state.score + (this.state.round * this.state.round * 100)
       });
+      ga('send', 'event', 'userEvent', 'advanceRound', 'advancingToRound', this.state.round + 1);
     },
 
     reportGameOver: function(opts) {
