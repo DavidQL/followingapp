@@ -29914,7 +29914,8 @@ module.exports = React.createClass({displayName: 'exports',
           this.tweets = tweets;
           this.setState({
             game_data: streamParser(tweets),
-            round: this.state.round
+            round: this.state.round,
+            loading: null
           });
         }.bind(this))
         .fail(function(error) {
@@ -29930,6 +29931,10 @@ module.exports = React.createClass({displayName: 'exports',
 
     getInitialState: function() {
       return {
+        loading: {
+          text: "Fetching tweets...",
+          type: "Error"
+        },
         game_data: {
           round1: [{
             tweet: {},
@@ -30009,7 +30014,9 @@ module.exports = React.createClass({displayName: 'exports',
           RoundCounter({round: this.state.round}), 
           
             (function() {
-              if (this.state.gameOver) {
+              if (this.state.loading) {
+                return Alert({data: this.state.loading, className: "col-md-6"})
+              } else if (this.state.gameOver) {
                 return Alert({type: this.state.alertType, gameOver: this.state.gameOver, timeBonus: this.state.secondsLeft * 10, score: this.state.score, round: this.state.round, resetGame: this.resetGame, className: "col-md-6"})
               } else {
                 return (
