@@ -1,1 +1,1 @@
-watchify -t reactify js/main.jsx -o public/javascripts/bundle.js -v
+This whole thing was cowboy'd ¯\_(ツ)_/¯
