@@ -76,7 +76,7 @@ module.exports = function(tweets) {
       return tweet.readable_source;
     })
     .uniq()
-    .sample(5)
+    .sample(1)
     .value();
 
   var round1 = generateRound({tweets: tweets, peopleCount: 2, uniqueUsers: uniqueUsers});
