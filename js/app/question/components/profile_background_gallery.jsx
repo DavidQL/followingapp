@@ -5,8 +5,8 @@ module.exports = React.createClass({
     render: function() {
       // TODO: on image load fail replace with no-profile-background
       var ProfileImgs = _.map(this.props.game_data[this.props.attempt - 1].people, function(person) {
-        var img_url = person.profile_banner_url && person.profile_banner_url + "/300x100";
-        var correctAnswerClass = this.props.game_data[this.props.attempt - 1].tweet.author_id === person.id ? "correct": "";
+        var img_url = person.profile_banner_url && person.profile_banner_url + '/300x100';
+        var correctAnswerClass = this.props.game_data[this.props.attempt - 1].tweet.author_id === person.id ? 'correct': '';
         if (!img_url) {
           return <div className={"no-profile-background " + correctAnswerClass} onClick={this.props.onChoose.bind(null, person)}><span>@{person.screen_name}</span></div>
         }

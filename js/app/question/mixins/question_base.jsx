@@ -21,8 +21,8 @@ module.exports = {
       this.setState({
         attempt: this.state.attempt + 1,
         alert: {
-          text: "Wrong! Now at attempt " + (this.state.attempt + 1) + " of 3.",
-          type: "Error"
+          text: 'Wrong! Now at attempt ' + (this.state.attempt + 1) + ' of 3.',
+          type: 'Error'
         }
       });
 
@@ -39,8 +39,8 @@ module.exports = {
         this.setState({
           attempt: this.state.attempt + 1,
           alert: {
-            text: "Nice! Onto the next round...",
-            type: "Success"
+            text: 'Nice! Onto the next round...',
+            type: 'Success'
           }
         });
         setTimeout(this.props.advanceRound, 1000);

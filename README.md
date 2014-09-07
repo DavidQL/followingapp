@@ -1,1 +1,1 @@
-This whole thing was cowboy'd ¯\_(ツ)_/¯
+This whole thing was cowboy'd `¯\_(ツ)_/¯`

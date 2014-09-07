@@ -29450,9 +29450,9 @@ var _ = require('underscore');
 
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
-      var className = "alert " + (this.props.type || this.props.data.type) + ' ' + this.props.className;
+      var className = 'alert ' + (this.props.type || this.props.data.type) + ' ' + this.props.className;
       if (this.props.gameOver && this.props.type === "Success") {
-        var tweet_url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent("I just won #Following! How well do you know your timeline? Find out: http://followingapp.herokuapp.com"); 
+        var tweet_url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent('I just won #Following! How well do you know your timeline? Find out: http://followingapp.herokuapp.com'); 
         return (
           React.DOM.div({className: className}, 
             React.DOM.h2(null, "You won!"), 
@@ -29466,8 +29466,8 @@ module.exports = React.createClass({displayName: 'exports',
         );
       }
       if (this.props.gameOver && this.props.type === "Error") {
-        var tweet_text = "I got to round " + this.props.round + " on #Following. How well do you know your timeline? Find out: http://followingapp.herokuapp.com";
-        var tweet_url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet_text); 
+        var tweet_text = 'I got to round ' + this.props.round + ' on #Following. How well do you know your timeline? Find out: http://followingapp.herokuapp.com';
+        var tweet_url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(tweet_text); 
         return (
           React.DOM.div({className: className}, 
             React.DOM.h2(null, "Game over!"), 
@@ -29498,9 +29498,9 @@ var _ = require('underscore');
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
       var Avatars = _.map(this.props.game_data[this.props.attempt - 1].people, function(person) {
-        var img_url = person.profile_image_url && person.profile_image_url.replace(/_normal/, "_bigger");
+        var img_url = person.profile_image_url && person.profile_image_url.replace(/_normal/, '_bigger');
         var selected = this.props.selectedUserId === person.id ? 'selected' : '';
-        var correctAnswerClass = this.props.game_data[this.props.attempt - 1].tweet.author_id === person.id ? "correct": "";
+        var correctAnswerClass = this.props.game_data[this.props.attempt - 1].tweet.author_id === person.id ? 'correct': '';
         if (this.props.showHandles) {
            return (
             React.DOM.div({className: "wrapped-image"}, 
@@ -29529,8 +29529,8 @@ module.exports = React.createClass({displayName: 'exports',
     render: function() {
       // TODO: on image load fail replace with no-profile-background
       var ProfileImgs = _.map(this.props.game_data[this.props.attempt - 1].people, function(person) {
-        var img_url = person.profile_banner_url && person.profile_banner_url + "/300x100";
-        var correctAnswerClass = this.props.game_data[this.props.attempt - 1].tweet.author_id === person.id ? "correct": "";
+        var img_url = person.profile_banner_url && person.profile_banner_url + '/300x100';
+        var correctAnswerClass = this.props.game_data[this.props.attempt - 1].tweet.author_id === person.id ? 'correct': '';
         if (!img_url) {
           return React.DOM.div({className: "no-profile-background " + correctAnswerClass, onClick: this.props.onChoose.bind(null, person)}, React.DOM.span(null, "@", person.screen_name))
         }
@@ -29580,7 +29580,7 @@ var $ = require('./../../../../bower_components/jquery/dist/jquery');
 module.exports = React.createClass({displayName: 'exports',
     render: function() {
       var Sources = _.map(this.props.game_data[this.props.attempt - 1].uniqueTweetSources, function(source) {
-        var isCorrect = this.props.game_data[this.props.attempt - 1].tweet.readable_source === source ? "correct" : "";
+        var isCorrect = this.props.game_data[this.props.attempt - 1].tweet.readable_source === source ? 'correct' : '';
         return React.DOM.span({onClick: this.props.onChoose.bind(null, source), className: isCorrect}, source)
       }, this);
       return (
@@ -29649,8 +29649,8 @@ module.exports = {
       this.setState({
         attempt: this.state.attempt + 1,
         alert: {
-          text: "Wrong! Now at attempt " + (this.state.attempt + 1) + " of 3.",
-          type: "Error"
+          text: 'Wrong! Now at attempt ' + (this.state.attempt + 1) + ' of 3.',
+          type: 'Error'
         }
       });
 
@@ -29667,8 +29667,8 @@ module.exports = {
         this.setState({
           attempt: this.state.attempt + 1,
           alert: {
-            text: "Nice! Onto the next round...",
-            type: "Success"
+            text: 'Nice! Onto the next round...',
+            type: 'Success'
           }
         });
         setTimeout(this.props.advanceRound, 1000);
